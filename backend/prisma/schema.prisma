@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id               String          @id @default(uuid())
+  name             String
+  email            String          @unique
+  password         String
+  registernumber   String?         @unique
+  year             String
+  departmant       String
+  YearofGraduation Int
+  cgpa             String
+  batch            String
+  isPlaced         Boolean         @default(false)
+  FieldofInterest  FieldofInterest
+  placedCompany    placedCompany[]
+}
+
+enum FieldofInterest {
+  Core
+  IT
+}
+
+model admin {
+  id       String @id @default(uuid())
+  email    String
+  password String
+}
+
+model jobs {
+  id             String          @id @default(uuid())
+  CompanyName    String
+  role           String
+  package        String
+  jobdescription String
+  Type           FieldofInterest
+  eligibility    String
+  departmant     Json
+  applylink      String
+  deadline       DateTime
+  companyvisit   DateTime
+  status         String          @default("current")
+}
+
+model placedCompany {
+  id                String  @id @default(uuid())
+  studentid         String
+  student           Student @relation(fields: [studentid], references: [id])
+  placedCompanyname String
+  onCampus          Boolean @default(true)
+  package           String
+  role              String
+}
