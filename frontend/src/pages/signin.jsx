@@ -16,24 +16,23 @@ export const Signin = () => {
   } = useSignin();
 
   return (
-    <div className="bg-[url('https://wallpapercave.com/wp/wp3260428.jpg')] object-fill h-screen">
+    <div className="bg-gradient-to-l from-[#a935fd] to-[#35fdf5] object-fill min-h-screen">
       <div>
         <Appheader></Appheader>
-        <div className="flex items-center justify-center pt-24">
+        <div className="flex items-center justify-center pt-24 text-white">
           <div className="w-[528px] p-12 rounded-lg mb-[120px]">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-extrabold text-gray-900">
-                PLACEMENT ASSISTANT
-              </h1>
+              <h1 className="text-3xl font-extrabold">SKILL NODE</h1>
             </div>
 
-            <div className="space-y-6 flex">
-              <div>email</div>
+            <div className="space-y-2">
+              <div className="text-md font-bold">email</div>
               <InputBox
                 placeholder="Enter your Email"
                 onChange={(e) => setEmail(e.target.value)}
               />
               {emailError && <div className="text-red-500">{emailError}</div>}
+              <div className="text-md font-bold">password</div>
               <PasswordBox
                 placeholder="Please enter your password"
                 onChange={(e) => setPassword(e.target.value)}

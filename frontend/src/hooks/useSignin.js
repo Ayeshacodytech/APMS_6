@@ -26,7 +26,7 @@ export function useSignin() {
         setError("");
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/v1/auth/login",
+                "http://localhost:3000/api/v1/student/signin",
                 {
                     email,
                     password,
@@ -39,7 +39,7 @@ export function useSignin() {
             };
 
             handleLoginResponse(response.data.token);
-            navigate("/dashboard");
+            navigate("/home");
         } catch (err) {
             setError("Sign in failed. Please check your credentials and try again.");
         } finally {

@@ -21,6 +21,8 @@ const signupSchema = zod.object({
     isPlaced: zod.boolean().optional(),
     FieldofInterest: zod.string(),
     placedCompany: zod.array(zod.string()).optional(),
+    cgpa:zod.string().optional(),
+    batch:zod.string()
 });
 
 async function hashPassword(password) {
@@ -59,7 +61,9 @@ router.post('/signup', async (req, res) => {
                 YearofGraduation: body.YearofGraduation,
                 isPlaced: body.isPlaced ?? false,
                 FieldofInterest: body.FieldofInterest,
-                placedCompany: body.placedCompany,
+                cgpa:body.cgpa,
+                batch:body.batch
+                
             }
         });
         const token = jwt.sign({ id: user.id, role: 'student' }, JWT_SECRET);

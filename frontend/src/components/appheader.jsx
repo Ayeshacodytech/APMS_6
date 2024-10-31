@@ -1,6 +1,6 @@
 export function Appheader() {
   return (
-    <nav className="flex justify-start px-4">
+    <nav className="flex justify-start px-4 py-4">
       <div className="w-16 h-16 rounded-lg">
         <img
           className="rounded-full"
