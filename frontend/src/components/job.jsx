@@ -1,9 +1,14 @@
-export function Job() {
+import { useNavigate } from "react-router-dom";
+export function Job({ job }) {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/home/${job.id}`, { state: { job } }); // Pass the job object in state
+  };
   return (
-    <div className="col-span-1">
+    <div className="col-span-1 transition-transform transform hover:scale-105">
       <div className="border h-64 rounded-lg">
         <div className="text-lg flex justify-center py-2 font-bold italic bg-black text-white item-center rounded-lg">
-          ABC Company
+          {job.CompanyName}
         </div>
         <div className="flex pl-8 py-2">
           <div className="pt-0.5">
@@ -33,7 +38,7 @@ export function Job() {
             </svg>
           </div>
           <div className="text-md italic">Role:</div>
-          <div className="pl-4 text-md font-semibold">Software Engineer</div>
+          <div className="pl-4 text-md font-semibold">{job.role}</div>
         </div>
         <div className="flex pl-8 py-1">
           <div className="pt-0.5">
@@ -80,7 +85,7 @@ export function Job() {
             </svg>
           </div>
           <div className="text-md italic">Package:</div>
-          <div className="pl-4 text-md font-semibold">5,00,000</div>
+          <div className="pl-4 text-md font-semibold">{job.package}</div>
         </div>
         <div className="flex pl-8 py-2">
           <div className="pt-0.5">
@@ -110,7 +115,7 @@ export function Job() {
             </svg>
           </div>
           <div className="text-md italic">Type:</div>
-          <div className="pl-4 text-md font-semibold">Core</div>
+          <div className="pl-4 text-md font-semibold">{job.Type}</div>
         </div>
         <div className="flex pl-8 py-2">
           <div className="pt-0.5">
@@ -151,9 +156,7 @@ export function Job() {
             </svg>
           </div>
           <div className="text-md italic">Eligibility:</div>
-          <div className="pl-4 text-md font-semibold">
-            Mech, ECE, EEE, CSE, Civil
-          </div>
+          <div className="pl-4 text-md font-semibold">{job.eligibility}</div>
         </div>
         <div className="pt-2 flex px-8 justify-between">
           <div className="">
@@ -162,7 +165,10 @@ export function Job() {
             </button>
           </div>
           <div>
-            <button className="bg-black text-white font-semibold py-1 px-3 rounded-lg transition-transform transform hover:scale-110">
+            <button
+              className="bg-black text-white font-semibold py-1 px-3 rounded-lg transition-transform transform hover:scale-110"
+              onClick={handleClick}
+            >
               View job
             </button>
           </div>

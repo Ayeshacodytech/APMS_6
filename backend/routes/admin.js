@@ -101,13 +101,19 @@ const jobSchema = zod.object({
     eligibility: zod.string(),
     departmant: zod.any(),
     applylink: zod.string().url(),
-    deadline: zod.string().transform((str) => new Date(str)),
-    companyvisit: zod.string().transform((str) => new Date(str)),
+    deadline: zod.string().refine((str) => !isNaN(Date.parse(str)), {
+        message: "Invalid date format for deadline",
+    }).transform((str) => new Date(str)),
+    companyvisit: zod.string().refine((str) => !isNaN(Date.parse(str)), {
+        message: "Invalid date format for companyvisit",
+    }).transform((str) => new Date(str)),
     status: zod.string().optional(),
 });
+;
 
 
-router.post('/addJob',authMiddleware('admin'), async (req, res) => {
+
+router.post('/addJob', authMiddleware('admin'), async (req, res) => {
     try {
         const body = req.body;
         const validation = jobSchema.safeParse(body);
@@ -128,8 +134,8 @@ router.post('/addJob',authMiddleware('admin'), async (req, res) => {
                 eligibility: body.eligibility,
                 departmant: body.departmant,
                 applylink: body.applylink,
-                deadline: body.deadline,
-                companyvisit: body.companyvisit,
+                deadline: validation.data.deadline,
+                companyvisit: validation.data.companyvisit,
                 status: body.status ?? "current",
             }
         });
@@ -143,6 +149,7 @@ router.post('/addJob',authMiddleware('admin'), async (req, res) => {
         await prisma.$disconnect();
     }
 });
+
 
 const jobUpdateSchema = zod.object({
     CompanyName: zod.string().optional(),

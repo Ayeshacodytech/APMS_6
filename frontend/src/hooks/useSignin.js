@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/authContext";
 
 export function useSignin() {
+    const {login}=useAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -34,11 +36,7 @@ export function useSignin() {
             );
             console.log(response.data.token);
 
-            const handleLoginResponse = (token) => {
-                const extractedToken = token.split(" ")[1];
-            };
-
-            handleLoginResponse(response.data.token);
+            login(response.data.token);
             navigate("/home");
         } catch (err) {
             setError("Sign in failed. Please check your credentials and try again.");

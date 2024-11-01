@@ -16,8 +16,8 @@ const signupSchema = zod.object({
     password: zod.string(),
     registernumber: zod.string().optional(),
     year: zod.string(),
-    departmant: zod.string(),
-    YearofGraduation: zod.number(),
+    department: zod.string(),
+    YearofGraduation: zod.string(),
     isPlaced: zod.boolean().optional(),
     FieldofInterest: zod.string(),
     placedCompany: zod.array(zod.string()).optional(),
@@ -32,7 +32,9 @@ async function hashPassword(password) {
 router.post('/signup', async (req, res) => {
     try {
         const body = req.body;
+        console.log(body);
         const validation = signupSchema.safeParse(body);
+        console.log(validation);
         if (!validation.success) {
             return res.status(400).json({
                 message: "Incorrect inputs",
@@ -57,7 +59,7 @@ router.post('/signup', async (req, res) => {
                 password: hashedPassword,
                 registernumber: body.registernumber,
                 year: body.year,
-                departmant: body.departmant,
+                department: body.department,
                 YearofGraduation: body.YearofGraduation,
                 isPlaced: body.isPlaced ?? false,
                 FieldofInterest: body.FieldofInterest,
@@ -126,7 +128,7 @@ const profileUpdateSchema = zod.object({
     password: zod.string().optional(),
     registernumber: zod.string().optional(),
     year: zod.string().optional(),
-    departmant: zod.string().optional(),
+    department: zod.string().optional(),
     YearofGraduation: zod.number().optional(),
     FieldofInterest: zod.string().optional(),
 });
@@ -154,7 +156,7 @@ router.put('/updateProfile',authMiddleware('student'), async (req, res) => {
                 password: body.password,
                 registernumber: body.registernumber,
                 year: body.year,
-                departmant: body.departmant,
+                department: body.department,
                 YearofGraduation: body.YearofGraduation,
                 FieldofInterest: body.FieldofInterest,
             }

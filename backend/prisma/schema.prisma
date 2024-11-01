@@ -20,8 +20,8 @@ model Student {
   password         String
   registernumber   String?         @unique
   year             String
-  departmant       String
-  YearofGraduation Int
+  department       String
+  YearofGraduation String
   cgpa             String
   batch            String
   isPlaced         Boolean         @default(false)
@@ -45,7 +45,7 @@ model jobs {
   CompanyName    String
   role           String
   package        String
-  jobdescription String
+  jobdescription String          @db.LongText
   Type           FieldofInterest
   eligibility    String
   departmant     Json
