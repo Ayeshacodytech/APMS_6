@@ -1,9 +1,20 @@
+import { useNavigate } from "react-router-dom";
 export function SideNavBar() {
+  const navigate = useNavigate();
+  const homeclick = () => {
+    navigate("/home");
+  };
+  const profileclick = () => {
+    navigate("/profile");
+  };
   return (
     <div>
       <nav className="w-60 shadow-lg min-h-screen pt-6 fixed top-0 left-0 bordered w-60 shadow-lg min-h-screen pt-6 fixed top-0 left-0 bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] object-fill min-h-screen">
         <div className="px-8 py-2">
-          <button className="bg-black text-white rounded-lg px-4 py-1 pr-[62px] flex items-center transition-transform transform hover:scale-110">
+          <button
+            onClick={homeclick}
+            className="bg-black text-white rounded-lg px-4 py-1 pr-[62px] flex items-center transition-transform transform hover:scale-110"
+          >
             <div className="pr-3">
               <svg
                 width="20px"
@@ -58,7 +69,7 @@ export function SideNavBar() {
             Home
           </button>
         </div>
-        <div className="px-8 py-2">
+        {/* <div className="px-8 py-2">
           <button className="bg-black text-white rounded-lg px-4 py-1 pr-[72px] flex items-center transition-transform transform hover:scale-110">
             <div className="pr-3">
               <svg
@@ -89,7 +100,7 @@ export function SideNavBar() {
             </div>
             Jobs
           </button>
-        </div>
+        </div> */}
         <div className="px-8 py-2">
           <button className="bg-black text-white rounded-lg px-4 py-1 pr-5 flex items-center transition-transform transform hover:scale-110">
             <div className="pr-3">
@@ -228,7 +239,10 @@ export function SideNavBar() {
           </button>
         </div>
         <div className="px-8 py-2">
-          <button className="bg-black text-white rounded-lg px-4 py-1 pr-[57px] flex items-center transition-transform transform hover:scale-110">
+          <button
+            className="bg-black text-white rounded-lg px-4 py-1 pr-[57px] flex items-center transition-transform transform hover:scale-110"
+            onClick={profileclick}
+          >
             <div className="pr-3">
               <svg
                 width="20px"

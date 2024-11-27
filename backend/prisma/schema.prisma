@@ -14,19 +14,28 @@ datasource db {
 }
 
 model Student {
-  id               String          @id @default(uuid())
-  name             String
-  email            String          @unique
-  password         String
-  registernumber   String?         @unique
-  year             String
-  department       String
-  YearofGraduation String
-  cgpa             String
-  batch            String
-  isPlaced         Boolean         @default(false)
-  FieldofInterest  FieldofInterest
-  placedCompany    placedCompany[]
+  id                    String             @id @default(uuid())
+  name                  String
+  email                 String             @unique
+  password              String
+  registernumber        String?            @unique
+  year                  String
+  department            String
+  YearofGraduation      String
+  cgpa                  String
+  batch                 String
+  isPlaced              Boolean            @default(false)
+  FieldofInterest       FieldofInterest
+  placedCompany         placedCompany[]
+  posts                 community[]
+  sentNotifications     Notification[]     @relation("NotificationSender")
+  receivedNotifications Notification[]     @relation("NotificationReceiver")
+  Comments              Comments[]
+  CommentReply          CommentReply[]
+  PostLike              PostLike[]
+  CommentLike           CommentLike[]
+  CommentReplyLike      CommentReplyLike[]
+  Like                  Like[]
 }
 
 enum FieldofInterest {
@@ -63,4 +72,101 @@ model placedCompany {
   onCampus          Boolean @default(true)
   package           String
   role              String
+}
+
+model community {
+  id           String         @id @default(uuid())
+  title        String
+  content      String
+  topic        String
+  author       Student        @relation(fields: [authorId], references: [id])
+  authorId     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  comments     Comments[]
+  likes        Like[]
+  notification Notification[]
+  PostLike     PostLike[]
+}
+
+model Comments {
+  id        String         @id @default(uuid())
+  message   String?
+  date      DateTime       @default(now())
+  authorId  String
+  author    Student        @relation(fields: [authorId], references: [id])
+  postId    String
+  post      community      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime?      @default(now())
+  replies   CommentReply[]
+  likes     CommentLike[]
+}
+
+model CommentReply {
+  id              String             @id @default(uuid())
+  message         String
+  date            DateTime           @default(now())
+  authorId        String
+  author          Student            @relation(fields: [authorId], references: [id])
+  parentCommentId String
+  parentComment   Comments           @relation(fields: [parentCommentId], references: [id], onDelete: Cascade)
+  createdAt       DateTime?          @default(now())
+  likes           CommentReplyLike[]
+}
+
+model PostLike {
+  id        String    @id @default(uuid())
+  postId    String
+  post      community @relation(fields: [postId], references: [id])
+  userId    String
+  user      Student   @relation(fields: [userId], references: [id])
+  createdAt DateTime? @default(now())
+}
+
+model CommentLike {
+  id        String    @id @default(uuid())
+  commentId String
+  comment   Comments  @relation(fields: [commentId], references: [id])
+  userId    String
+  user      Student   @relation(fields: [userId], references: [id])
+  createdAt DateTime? @default(now())
+}
+
+model CommentReplyLike {
+  id             String       @id @default(uuid())
+  commentReplyId String
+  commentReply   CommentReply @relation(fields: [commentReplyId], references: [id])
+  userId         String
+  user           Student      @relation(fields: [userId], references: [id])
+  createdAt      DateTime?    @default(now())
+}
+
+model Like {
+  id          String     @id @default(uuid())
+  userId      String
+  user        Student    @relation(fields: [userId], references: [id])
+  createdAt   DateTime?  @default(now())
+  community   community? @relation(fields: [communityId], references: [id])
+  communityId String?
+}
+
+model Notification {
+  id               String           @id @default(uuid())
+  senderId         String
+  sender           Student          @relation("NotificationSender", fields: [senderId], references: [id])
+  receiverId       String
+  receiver         Student          @relation("NotificationReceiver", fields: [receiverId], references: [id])
+  notificationType NotificationType
+  date             DateTime?
+  notificationData Json
+  postId           String?
+  post             community?       @relation(fields: [postId], references: [id])
+  read             Boolean          @default(false)
+}
+
+enum NotificationType {
+  like
+  comment
+  mention
+  reply
 }

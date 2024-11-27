@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 export function Job({ job }) {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/home/${job.id}`, { state: { job } }); // Pass the job object in state
+    navigate(`/home/${job.id}`, { state: { job } });
   };
   return (
     <div className="col-span-1 transition-transform transform hover:scale-105">

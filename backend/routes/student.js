@@ -122,17 +122,35 @@ router.post('/signin', async (req, res) => {
     }
 });
 const profileUpdateSchema = zod.object({
-    id: zod.string(),
     name: zod.string().optional(),
     email: zod.string().email().optional(),
     password: zod.string().optional(),
     registernumber: zod.string().optional(),
     year: zod.string().optional(),
     department: zod.string().optional(),
-    YearofGraduation: zod.number().optional(),
+    YearofGraduation: zod.string().optional(),
     FieldofInterest: zod.string().optional(),
 });
+router.get('/profile', authMiddleware('student'), async (req, res) => {
+    try {
+        const profile = await prisma.student.findUnique({
+            where: { id: req.userId }  // Access the user ID from req.user
+        });
 
+        if (!profile) {
+            return res.status(404).json({ message: 'Profile not found' });
+        }
+
+        return res.json(profile);
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Internal server error',
+            error: error.message
+        });
+    } finally {
+        await prisma.$disconnect();
+    }
+})
 router.put('/updateProfile',authMiddleware('student'), async (req, res) => {
     try {
         const body = req.body;
@@ -149,16 +167,17 @@ router.put('/updateProfile',authMiddleware('student'), async (req, res) => {
         }
 
         const updatedUser = await prisma.student.update({
-            where: { id: body.id },
+            where: { id: req.userId },
             data: {
                 name: body.name,
                 email: body.email,
-                password: body.password,
                 registernumber: body.registernumber,
                 year: body.year,
                 department: body.department,
                 YearofGraduation: body.YearofGraduation,
                 FieldofInterest: body.FieldofInterest,
+                batch:body.batch,
+                cgpa:body.cgpa,
             }
         });
         return res.json(updatedUser);
