@@ -1,9 +1,20 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-export function Job({ job }) {
+import { useDispatch } from "react-redux";
+import { deleteJob } from "../store/slices/jobSlice";
+
+export function AdminJob({ job }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleClick = () => {
-    navigate(`/jobs/${job.id}`, { state: { job } });
+    navigate(`/admin/jobs/${job.id}`, { state: { job } });
   };
+
+  const handleDelete = (id) => {
+    dispatch(deleteJob(id));
+  };
+
   return (
     <div className="transform transition-all duration-300 hover:scale-105">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -129,7 +140,13 @@ export function Job({ job }) {
         </div>
 
         {/* Actions */}
-        <div className="px-4 py-3 bg-gray-50 flex justify-center gap-2">
+        <div className="px-4 py-3 bg-gray-50 flex justify-between gap-2">
+          <button
+            onClick={() => handleDelete(job.id)}
+            className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Delete
+          </button>
           <button
             onClick={handleClick}
             className="px-4 py-2 text-sm bg-gradient-to-r from-purple-500 to-cyan-400 text-white rounded-lg hover:opacity-90 transition-opacity"

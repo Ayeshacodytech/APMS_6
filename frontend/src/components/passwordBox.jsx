@@ -16,7 +16,7 @@ export function PasswordBox({ placeholder, onChange }) {
           type={passwordVisible ? "text" : "password"}
           placeholder={placeholder}
           onChange={onChange}
-          className="w-full pl-4 px-1 py-2 border rounded border-slate-200 bg-custom-gray text-black"
+          className="w-full pl-4 px-1 py-2 border rounded border-slate-200 bg-slate-300 text-black"
         />
         <button
           type="button"

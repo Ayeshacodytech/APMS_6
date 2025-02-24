@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import jobsReducer from "./slices/jobSlice"; // import the jobs slice
+import jobsReducer from "./slices/jobSlice";
 import userReducer from "./slices/userSlice";
-
-// Create and configure the Redux store
+import communityReducer from "./slices/communitySlice";
+import notificationReducer from "./slices/notificationSlice"
 const store = configureStore({
     reducer: {
         jobs: jobsReducer,
-        user:userReducer
+        user:userReducer,
+        community:communityReducer,
+        notifications:notificationReducer
     },
 });
 

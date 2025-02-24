@@ -1,17 +1,36 @@
-import { SideNavBar } from "../components/SideNavbar";
-import { useLocation, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import { useState } from "react";
-import JobHeader from "../components/jobHeader";
-function JobDetails() {
+import AdminHeader from "../components/adminHeader";
+
+function AdminJobDetails() {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const { job } = location.state || {};
+  const [activeModal, setActiveModal] = useState(null);
+
+  if (!job) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <p className="text-center text-red-500">Job details not found.</p>
+        </div>
+      </div>
+    );
+  }
+
   const deadline = new Date(job.deadline);
   const companyVisit = new Date(job.companyvisit);
-  const [activeModal, setActiveModal] = useState(null);
+
   const formattedDeadline = format(deadline, "MMMM do, yyyy");
   const formattedCompanyVisit = format(companyVisit, "MMMM do, yyyy");
+
+  const handleUpdate = () => {
+    navigate(`/admin/update/job/${id}`, { state: { job } });
+  };
+
+  // Modal Component
   const Modal = ({ title, content, onClose }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl">
@@ -49,13 +68,11 @@ function JobDetails() {
       <div className="space-y-2">{children}</div>
     </div>
   );
+
   return (
-    <div className=" object-fill min-h-screen">
-      <SideNavBar></SideNavBar>
-      <div className="pl-64">
-        <JobHeader></JobHeader>
-      </div>
-      <div className="pl-64 px-3 py-8">
+    <div className="min-h-screen bg-gray-50">
+      <AdminHeader />
+      <div className="px-4 py-8 max-w-7xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-gradient-to-r from-purple-500 to-cyan-400 p-6">
             <h1 className="text-3xl font-bold text-white">{job.CompanyName}</h1>
@@ -197,19 +214,28 @@ function JobDetails() {
                   />
                 </svg>
               </a>
+
+              <button
+                onClick={handleUpdate}
+                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Update Job
+              </button>
             </div>
           </div>
         </div>
-        {activeModal && (
-          <Modal
-            title={activeModal.title}
-            content={activeModal.content}
-            onClose={() => setActiveModal(null)}
-          />
-        )}
       </div>
+
+      {/* Modal */}
+      {activeModal && (
+        <Modal
+          title={activeModal.title}
+          content={activeModal.content}
+          onClose={() => setActiveModal(null)}
+        />
+      )}
     </div>
   );
 }
 
-export default JobDetails;
+export default AdminJobDetails;

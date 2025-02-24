@@ -57,7 +57,7 @@ model jobs {
   jobdescription String          @db.LongText
   Type           FieldofInterest
   eligibility    String
-  departmant     Json
+  department     Json
   applylink      String
   deadline       DateTime
   companyvisit   DateTime

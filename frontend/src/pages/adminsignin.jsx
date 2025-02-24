@@ -1,10 +1,10 @@
-import { useSignin } from "../hooks/useSignin";
 import { InputBox } from "../components/inputBox";
 import { PasswordBox } from "../components/passwordBox";
 import { FunctionButton } from "../components/functionButton";
 import { Appheader } from "../components/appheader";
+import { useAdmin } from "../hooks/useAdmin";
 
-export const Signin = () => {
+export const Adminsignin = () => {
   const {
     setEmail,
     setPassword,
@@ -13,7 +13,7 @@ export const Signin = () => {
     emailError,
     passwordError,
     handleSignin,
-  } = useSignin();
+  } = useAdmin();
 
   return (
     <div className="bg-gradient-to-l from-[#a935fd] to-[#35fdf5] object-fill min-h-screen">
@@ -66,4 +66,4 @@ export const Signin = () => {
   );
 };
 
-export default Signin;
+export default Adminsignin;

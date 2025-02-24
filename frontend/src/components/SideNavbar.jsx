@@ -1,19 +1,26 @@
 import { useNavigate } from "react-router-dom";
+
 export function SideNavBar() {
   const navigate = useNavigate();
   const homeclick = () => {
     navigate("/home");
   };
+  const communityclick = () => {
+    navigate("/community");
+  };
   const profileclick = () => {
     navigate("/profile");
   };
+  const jobclick = () => {
+    navigate("/jobs");
+  };
   return (
     <div>
-      <nav className="w-60 shadow-lg min-h-screen pt-6 fixed top-0 left-0 bordered w-60 shadow-lg min-h-screen pt-6 fixed top-0 left-0 bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] object-fill min-h-screen">
+      <nav className="w-60 shadow-lg min-h-screen pt-6 fixed top-0 left-0 bordered w-60 shadow-lg min-h-screen bg-gray-300 pt-6 fixed top-0 left-0 object-fill min-h-screen">
         <div className="px-8 py-2">
           <button
+            className="bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-1 pr-[62px] flex items-center transition-transform transform hover:scale-110"
             onClick={homeclick}
-            className="bg-black text-white rounded-lg px-4 py-1 pr-[62px] flex items-center transition-transform transform hover:scale-110"
           >
             <div className="pr-3">
               <svg
@@ -69,8 +76,11 @@ export function SideNavBar() {
             Home
           </button>
         </div>
-        {/* <div className="px-8 py-2">
-          <button className="bg-black text-white rounded-lg px-4 py-1 pr-[72px] flex items-center transition-transform transform hover:scale-110">
+        <div className="px-8 py-2">
+          <button
+            onClick={jobclick}
+            className="bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-1 pr-[72px] flex items-center transition-transform transform hover:scale-110"
+          >
             <div className="pr-3">
               <svg
                 width="20px"
@@ -100,9 +110,12 @@ export function SideNavBar() {
             </div>
             Jobs
           </button>
-        </div> */}
+        </div>
         <div className="px-8 py-2">
-          <button className="bg-black text-white rounded-lg px-4 py-1 pr-5 flex items-center transition-transform transform hover:scale-110">
+          <button
+            className="bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-1 pr-5 flex items-center transition-transform transform hover:scale-110"
+            onClick={communityclick}
+          >
             <div className="pr-3">
               <svg
                 fill="#FFFFFF"
@@ -139,7 +152,7 @@ export function SideNavBar() {
           </button>
         </div>
         <div className="px-8 py-2">
-          <button className="bg-black text-white rounded-lg px-4 py-1 pr-16 flex items-center transition-transform transform hover:scale-110">
+          <button className="bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-1 pr-16 flex items-center transition-transform transform hover:scale-110">
             <div className="pr-3">
               <svg
                 width="20px"
@@ -187,7 +200,7 @@ export function SideNavBar() {
           </button>
         </div>
         <div className="px-8 py-2">
-          <button className="bg-black text-white rounded-lg px-4 py-1 pr-10 flex items-center transition-transform transform hover:scale-110">
+          <button className="bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-1 pr-10 flex items-center transition-transform transform hover:scale-110">
             <div className="pr-3">
               <svg
                 fill="#ffffff"
@@ -213,7 +226,7 @@ export function SideNavBar() {
           </button>
         </div>
         <div className="px-8 py-2">
-          <button className="bg-black text-white rounded-lg px-4 py-1 pr-[69px] flex items-center transition-transform transform hover:scale-110">
+          <button className="bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-1 pr-[69px] flex items-center transition-transform transform hover:scale-110">
             <div className="pr-3">
               <svg
                 fill="#ffffff"
@@ -240,7 +253,7 @@ export function SideNavBar() {
         </div>
         <div className="px-8 py-2">
           <button
-            className="bg-black text-white rounded-lg px-4 py-1 pr-[57px] flex items-center transition-transform transform hover:scale-110"
+            className="bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-1 pr-[57px] flex items-center transition-transform transform hover:scale-110"
             onClick={profileclick}
           >
             <div className="pr-3">
