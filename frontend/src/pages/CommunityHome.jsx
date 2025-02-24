@@ -20,7 +20,9 @@ function Communityhome() {
       dispatch(fetchPosts());
     }
   }, [status, dispatch]);
-
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
   console.log("Posts data:", posts); // Debugging
 
   return (

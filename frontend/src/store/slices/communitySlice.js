@@ -169,6 +169,7 @@ const communitySlice = createSlice({
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
+        // Ensure state.posts is always an array
         state.posts = action.payload;
       })
       .addCase(fetchPosts.rejected, (state, action) => {
@@ -187,18 +188,29 @@ const communitySlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(createPost.fulfilled, (state, action) => {
+        // Ensure state.posts is an array before pushing
+        if (!Array.isArray(state.posts)) {
+          state.posts = [];
+        }
         state.posts.push(action.payload);
       })
       .addCase(deletePost.fulfilled, (state, action) => {
-        state.myPosts = state.myPosts.filter(
-          (post) => post.id !== action.payload
-        );
-        state.posts = state.posts.filter((post) => post.id !== action.payload);
+        if (Array.isArray(state.myPosts)) {
+          state.myPosts = state.myPosts.filter(
+            (post) => post.id !== action.payload
+          );
+        }
+        if (Array.isArray(state.posts)) {
+          state.posts = state.posts.filter(
+            (post) => post.id !== action.payload
+          );
+        }
       })
       .addCase(likePost.fulfilled, (state, action) => {
         if (!Array.isArray(state.posts)) {
           console.error("state.posts is not an array!", state.posts);
           state.posts = []; // Reset to an array to prevent further errors
+          return;
         }
 
         const post = state.posts.find((p) => p.id === action.payload.postId);
@@ -208,6 +220,7 @@ const communitySlice = createSlice({
           console.warn("Post not found:", action.payload.postId);
         }
       })
+
       .addCase(fetchPostLikes.fulfilled, (state, action) => {
         if (
           state.postDetails &&
@@ -219,15 +232,19 @@ const communitySlice = createSlice({
         }
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
+        if (!Array.isArray(state.posts)) {
+          state.posts = [];
+          return;
+        }
+
         const post = state.posts.find((p) => p.id === action.payload.postId);
         if (post) post.comments = action.payload.comments;
       })
       .addCase(addComment.fulfilled, (state, action) => {
-        console.log("Current Posts State:", state.posts);
-
         if (!Array.isArray(state.posts)) {
           console.error("posts is not an array!", state.posts);
           state.posts = []; // Ensure it's an array to avoid errors
+          return;
         }
 
         const post = state.posts.find((p) => p.id === action.payload.postId);
@@ -243,7 +260,7 @@ const communitySlice = createSlice({
 
 export default communitySlice.reducer;
 
-export const selectPosts = (state) => state.community.posts;
+export const selectPosts = (state) => state.community.posts || [];
 export const selectPostDetails = (state) => state.community.postDetails;
 export const selectCommunityStatus = (state) => state.community.status;
 export const selectCommunityError = (state) => state.community.error;

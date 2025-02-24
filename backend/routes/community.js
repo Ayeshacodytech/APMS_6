@@ -17,57 +17,62 @@ const newPostSchema = z.object({
     topic: z.string().min(1, "Topic is required"),
 });
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Multer setup - Use memory storage
 const storage = multer.memoryStorage();
 const upload = multer({
-    storage,
-    limits: { fileSize: 1000 * 1024 * 1024 }, // 10MB limit
+  storage,
+  limits: { fileSize: 1000 * 1024 * 1024 }, // 10MB limit
 });
 
 // Upload Image Route
 router.post("/upload-image", upload.single("image"), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ message: "No image uploaded" });
-        }
-
-        // Log req.file to check the file data
-        console.log("Uploaded file:", req.file);
-
-        // Check if the file is a base64 string
-        if (req.file.mimetype === "image/png" || req.file.mimetype === "image/jpeg") {
-            console.log("Image type:", req.file.mimetype);
-        } else {
-            console.log("Uploaded file is not a valid image format");
-        }
-
-        const stream = cloudinary.uploader.upload_stream(
-            { folder: "blog_images" },
-            (error, result) => {
-                if (error) {
-                    console.error("Cloudinary upload error:", error);
-                    return res.status(500).json({ message: "Image upload failed" });
-                }
-
-                // Log result to ensure you are receiving the secure URL
-                console.log("Cloudinary upload result:", result);
-
-                // Send response with Cloudinary image URL
-                res.status(200).json({ imageUrl: result.secure_url });
-            }
-        );
-
-        // Upload the image buffer to Cloudinary
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
-    } catch (error) {
-        console.error("Image upload failed:", error);
-        res.status(500).json({ message: "Failed to upload image", error: error.message });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No image uploaded" });
     }
+
+    // Log req.file to check the file data
+    console.log("Uploaded file:", req.file);
+
+    // Check if the file is a base64 string
+    if (
+      req.file.mimetype === "image/png" ||
+      req.file.mimetype === "image/jpeg"
+    ) {
+      console.log("Image type:", req.file.mimetype);
+    } else {
+      console.log("Uploaded file is not a valid image format");
+    }
+
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "blog_images" },
+      (error, result) => {
+        if (error) {
+          console.error("Cloudinary upload error:", error);
+          return res.status(500).json({ message: "Image upload failed" });
+        }
+
+        // Log result to ensure you are receiving the secure URL
+        console.log("Cloudinary upload result:", result);
+
+        // Send response with Cloudinary image URL
+        res.status(200).json({ imageUrl: result.secure_url });
+      }
+    );
+
+    // Upload the image buffer to Cloudinary
+    streamifier.createReadStream(req.file.buffer).pipe(stream);
+  } catch (error) {
+    console.error("Image upload failed:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to upload image", error: error.message });
+  }
 });
 // Image Upload Route
 // router.post("/upload-image", upload.single("image"), async (req, res) => {
