@@ -36,6 +36,10 @@ model Student {
   CommentLike           CommentLike[]
   CommentReplyLike      CommentReplyLike[]
   Like                  Like[]
+  mcqAttempts           McqAttempt[]
+  gateMcqAttempts       GatemcqAttempt[]
+  resources             Resource[]
+  gateresources         Gateresource[]
 }
 
 enum FieldofInterest {
@@ -49,12 +53,22 @@ model admin {
   password String
 }
 
+model Teacher {
+  id         String     @id @default(uuid())
+  name       String
+  email      String     @unique
+  password   String
+  department String
+  resources  Resource[]
+  gateresources Gateresource[]
+}
+
 model jobs {
   id             String          @id @default(uuid())
   CompanyName    String
   role           String
   package        String
-  jobdescription String          @db.LongText
+  jobdescription String          @db.Text
   Type           FieldofInterest
   eligibility    String
   department     Json
@@ -169,4 +183,73 @@ enum NotificationType {
   comment
   mention
   reply
+}
+
+model Mcq {
+  id          String       @id @default(uuid())
+  question    String
+  options     Json
+  answer      String
+  explanation String?
+  attempts    McqAttempt[] @relation("MCQAttempt")
+  createdBy   String
+  createdAt   DateTime     @default(now())
+}
+
+model McqAttempt {
+  id        String   @id @default(uuid())
+  studentId String
+  mcqId     String
+  isCorrect Boolean
+  createdAt DateTime @default(now())
+  student   Student  @relation(fields: [studentId], references: [id])
+  mcq       Mcq      @relation(fields: [mcqId], references: [id], name: "MCQAttempt")
+}
+
+model Resource {
+  id               String   @id @default(uuid())
+  resource         String   @unique
+  tags             String
+  topic            String
+  addedByStudentId String?
+  addedByTeacherId String?
+  addedByType      String
+  createdAt        DateTime @default(now())
+
+  student Student? @relation(fields: [addedByStudentId], references: [id], map: "Resource_Student_fkey")
+  teacher Teacher? @relation(fields: [addedByTeacherId], references: [id], map: "Resource_Teacher_fkey")
+}
+model Gatemcq {
+  id          String       @id @default(uuid())
+  question    String
+  options     Json
+  answer      String
+  explanation String?
+  attempts    GatemcqAttempt[] @relation("GATEMCQAttempt")
+  createdBy   String
+  createdAt   DateTime     @default(now())
+}
+
+model GatemcqAttempt {
+  id        String   @id @default(uuid())
+  studentId String
+  gatemcqId     String
+  isCorrect Boolean
+  createdAt DateTime @default(now())
+  student   Student  @relation(fields: [studentId], references: [id])
+  mcq       Gatemcq      @relation(fields: [gatemcqId], references: [id], name: "GATEMCQAttempt")
+}
+
+model Gateresource {
+  id               String   @id @default(uuid())
+  resource         String   @unique
+  tags             String
+  topic            String
+  addedByStudentId String?
+  addedByTeacherId String?
+  addedByType      String
+  createdAt        DateTime @default(now())
+
+  student Student? @relation(fields: [addedByStudentId], references: [id], map: "GATE_Resource_Student_fkey")
+  teacher Teacher? @relation(fields: [addedByTeacherId], references: [id], map: "GATE_Resource_Teacher_fkey")
 }
