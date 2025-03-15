@@ -16,7 +16,7 @@ const token = Cookies.get("token") || "";
 export const fetchNotifications = createAsyncThunk("notifications/fetchNotifications", async () => {
     if (!token) throw new Error("Token not found");
 
-    const response = await axios.get("http://localhost:3000/api/v1/notification/", {
+    const response = await axios.get("http://localhost:3000/api/v1/notification/student", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;

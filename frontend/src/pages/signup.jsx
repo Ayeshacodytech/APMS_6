@@ -41,7 +41,7 @@ export const Signup = () => {
     batchError,
     cgpaError,
     fieldError,
-    handleSignup,
+    handleSignup
   } = useSignup();
 
   return (
@@ -105,14 +105,14 @@ export const Signup = () => {
                   setGraduationYear(value);
                 }}
                 value={graduationYear}
+
               />
               {graduationYearError && (
                 <div className="text-red-500">{graduationYearError}</div>
               )}
 
               <div className="text-md font-bold">Select Your Batch</div>
-              <BatchDropDown
-                onChange={(e) => setBatch(e.target.value)}
+              <BatchDropDown onChange={(e) => setBatch(e.target.value)}
                 value={batch}
               />
 
@@ -125,9 +125,7 @@ export const Signup = () => {
               />
               {cgpaError && <div className="text-red-500">{cgpaError}</div>}
 
-              <div className="text-md font-bold">
-                Select Your Field of Interest
-              </div>
+              <div className="text-md font-bold">Select Your Field of Interest</div>
               <FieldOfInterest
                 onChange={(e) => setField(e.target.value)}
                 value={field}

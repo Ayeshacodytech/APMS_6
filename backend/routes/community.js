@@ -17,88 +17,58 @@ const newPostSchema = z.object({
     topic: z.string().min(1, "Topic is required"),
 });
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 // Multer setup - Use memory storage
 const storage = multer.memoryStorage();
 const upload = multer({
-  storage,
-  limits: { fileSize: 1000 * 1024 * 1024 }, // 10MB limit
+    storage,
+    limits: { fileSize: 1000 * 1024 * 1024 }, // 10MB limit
 });
 
 // Upload Image Route
 router.post("/upload-image", upload.single("image"), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No image uploaded" });
-    }
-
-    // Log req.file to check the file data
-    console.log("Uploaded file:", req.file);
-
-    // Check if the file is a base64 string
-    if (
-      req.file.mimetype === "image/png" ||
-      req.file.mimetype === "image/jpeg"
-    ) {
-      console.log("Image type:", req.file.mimetype);
-    } else {
-      console.log("Uploaded file is not a valid image format");
-    }
-
-    const stream = cloudinary.uploader.upload_stream(
-      { folder: "blog_images" },
-      (error, result) => {
-        if (error) {
-          console.error("Cloudinary upload error:", error);
-          return res.status(500).json({ message: "Image upload failed" });
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No image uploaded" });
         }
 
-        // Log result to ensure you are receiving the secure URL
-        console.log("Cloudinary upload result:", result);
+        // Log req.file to check the file data
+        console.log("Uploaded file:", req.file);
 
-        // Send response with Cloudinary image URL
-        res.status(200).json({ imageUrl: result.secure_url });
-      }
-    );
+        // Check if the file is a base64 string
+        if (req.file.mimetype === "image/png" || req.file.mimetype === "image/jpeg") {
+            console.log("Image type:", req.file.mimetype);
+        } else {
+            console.log("Uploaded file is not a valid image format");
+        }
 
-    // Upload the image buffer to Cloudinary
-    streamifier.createReadStream(req.file.buffer).pipe(stream);
-  } catch (error) {
-    console.error("Image upload failed:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to upload image", error: error.message });
-  }
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: "blog_images" },
+            (error, result) => {
+                if (error) {
+                    console.error("Cloudinary upload error:", error);
+                    return res.status(500).json({ message: "Image upload failed" });
+                }
+
+                // Log result to ensure you are receiving the secure URL
+                console.log("Cloudinary upload result:", result);
+
+                // Send response with Cloudinary image URL
+                res.status(200).json({ imageUrl: result.secure_url });
+            }
+        );
+
+        // Upload the image buffer to Cloudinary
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+    } catch (error) {
+        console.error("Image upload failed:", error);
+        res.status(500).json({ message: "Failed to upload image", error: error.message });
+    }
 });
-// Image Upload Route
-// router.post("/upload-image", upload.single("image"), async (req, res) => {
-//     try {
-//         if (!req.file) {
-//             return res.status(400).json({ message: "No image uploaded" });
-//         }
-
-//         // Upload image to Cloudinary
-//         const result = await new Promise((resolve, reject) => {
-//             cloudinary.uploader.upload_stream(
-//                 { folder: "blog_images" },
-//                 (error, result) => {
-//                     if (error) reject(error);
-//                     else resolve(result);
-//                 }
-//             ).end(req.file.buffer);
-//         });
-
-//         return res.status(200).json({ imageUrl: result.secure_url });
-
-//     } catch (error) {
-//         console.error("Image upload failed:", error);
-//         res.status(500).json({ message: "Failed to upload image", error: error.message });
-//     }
-// });
 router.post("/newpost", authMiddleware('student'), async (req, res) => {
     try {
         const authorId = req.userId;
@@ -164,7 +134,7 @@ router.get("/posts", authMiddleware('student'), async (req, res) => {
 router.get("/myposts", authMiddleware('student'), async (req, res) => {
     try {
         // Get the user ID from the authenticated user
-        const {userId} = req;
+        const { userId } = req;
 
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -219,6 +189,7 @@ router.get('/posts/:postId', authMiddleware('student'), async (req, res) => {
                 comments: {
                     include: {
                         author: { select: { id: true, name: true, email: true } },
+                        teacher: { select: { id: true, name: true, email: true } },
                         likes: {
                             include: {
                                 user: { select: { id: true, name: true } }
@@ -227,9 +198,11 @@ router.get('/posts/:postId', authMiddleware('student'), async (req, res) => {
                         replies: {
                             include: {
                                 author: { select: { id: true, name: true } },
+                                teacher: { select: { id: true, name: true } },
                                 likes: {
                                     include: {
-                                        user: { select: { id: true, name: true } }
+                                        user: { select: { id: true, name: true } },
+                                        teacher: { select: { id: true, name: true } }
                                     }
                                 }
                             }
@@ -238,12 +211,14 @@ router.get('/posts/:postId', authMiddleware('student'), async (req, res) => {
                 },
                 likes: {
                     include: {
-                        user: { select: { id: true, name: true } }
+                        user: { select: { id: true, name: true } },
+                        teacher: { select: { id: true, name: true } }
                     }
                 },
                 PostLike: {  // If likes are stored in this model
                     include: {
-                        user: { select: { id: true, name: true } }
+                        user: { select: { id: true, name: true } },
+                        teacher: { select: { id: true, name: true } }
                     }
                 }
             }
@@ -254,21 +229,31 @@ router.get('/posts/:postId', authMiddleware('student'), async (req, res) => {
         }
 
         // Extracting users who liked the post
+        // Extract liked users and teachers from the likes array
         const likedUsers = post.likes.map(like => like.user);
+        const likedTeachers = post.likes.map(like => like.teacher);
+
+        // Extract liked users and teachers from the PostLike array (if it exists)
         const likedUsersFromPostLike = post.PostLike ? post.PostLike.map(like => like.user) : [];
+        const likedTeachersFromPostLike = post.PostLike ? post.PostLike.map(like => like.teacher) : [];
 
-        // Combine both in case likes are stored in different places
-        const allLikedUsers = [...likedUsers, ...likedUsersFromPostLike];
+        // Combine all users and teachers into a single array
+        const allLikedEntities = [
+            ...likedUsers,
+            ...likedTeachers,
+            ...likedUsersFromPostLike,
+            ...likedTeachersFromPostLike
+        ].filter(entity => entity !== null); // Ensure no null values are included
 
-        // Check if the current user has liked the post
-        const hasLiked = allLikedUsers.some(user => user.id === userId);
+        // Check if the current user (student or teacher) has liked the post
+        const hasLiked = allLikedEntities.some(entity => entity.id === userId);
 
+        // Use allLikedEntities as the combined liked data
         res.status(200).json({
             ...post,
-            likedUsers: allLikedUsers,  // Ensure liked users appear in the response
+            likedEntities: allLikedEntities, // All users and teachers who liked the post
             hasLiked
         });
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
@@ -409,13 +394,21 @@ router.post('/:postId/comments', authMiddleware('student'), async (req, res) => 
     }
 
     try {
+        // Retrieve the post with both teacher and author objects.
         const post = await prisma.community.findUnique({
             where: { id: postId },
+            select: {
+                id: true,
+                title: true,
+                teacher: { select: { id: true, name: true } },
+                author: { select: { id: true, name: true } }
+            }
         });
 
-        // Check if the author exists
+        // Check if the teacher (the sender) exists.
         const user = await prisma.student.findUnique({
             where: { id: userId },
+            select: { id: true, name: true }
         });
 
         if (!post) {
@@ -426,7 +419,7 @@ router.post('/:postId/comments', authMiddleware('student'), async (req, res) => 
             return res.status(404).send({ error: 'User not found.' });
         }
 
-        // Now create the comment
+        // Create the comment.
         const comment = await prisma.comments.create({
             data: {
                 message,
@@ -434,63 +427,55 @@ router.post('/:postId/comments', authMiddleware('student'), async (req, res) => 
                 postId: postId,
             },
         });
-        const mentionedUsernames = linkify.find(message)
-            .filter(item => item.type === 'mention')
-            .map(item => item.value.split('@')[1]);
 
-        const mentionedUsers = await prisma.student.findMany({
-            where: { name: { in: mentionedUsernames } },
-            select: { id: true, name: true }
-        });
+        // Prepare an array for notifications.
+        const notificationPromises = [];
 
-        const notificationPromises = mentionedUsers.map(async (mentionedUser) => {
-            if (String(mentionedUser.id) !== String(userId)) {
-                const notification = await prisma.notification.create({
-                    data: {
-                        senderId: userId,
-                        receiverId: mentionedUser.id,
-                        notificationType: 'mention',
-                        date: new Date(),
-                        postId: post.id,
-                        notificationData: {
-                            message: `${user.name} mentioned you in a comment: ${message}`,
-                            title: post.title
-                        },
-                        read: false,
-                    },
-                });
-                console.log("Attempting to emit mention notification...");
-                socket.getIO().to(mentionedUser.id).emit('notification', notification);
-                console.log(socket.getIO().to(mentionedUser.id).emit('notification', notification))
-                console.log("notification sent")
-            }
-        });
-
-        if (String(post.userId) !== String(userId)) {
-            const commentNotification = await prisma.notification.create({
+        // Notify the post owner if a teacher is associated.
+        if (post.teacher && post.teacher.id) {
+            const teacherNotification = prisma.notification.create({
                 data: {
                     senderId: userId,
-                    receiverId: post.authorId,
+                    teacherreceiverId: post.teacher.id,
                     notificationType: 'comment',
                     date: new Date(),
-                    postId: post.id,
+                    postId: postId,
                     notificationData: {
-                        message: `${user.name} commented on your post: ${message}`,
-                        title: post.title
+                        message: `${user.name} commented on your post.`,
+                        title: post.title // or you might use post.title if that field is available 
                     },
                     read: false,
-                },
+                }
             });
-            console.log('Emitting notification to user:', mentionedUsers.id, commentNotification);
-            //socket.getIO().to(mentionedUsers.id).emit('notification', notification);
-
-            socket.getIO().to(post.userId).emit('notification', commentNotification);
-            console.log("success")
+            notificationPromises.push(teacherNotification);
+            socket.getIO().to(post.teacher.id).emit('notification', teacherNotification);
         }
+
+        // Notify the author of the post if available.
+        if (post.author && post.author.id!==userId) {
+            const authorNotification = prisma.notification.create({
+                data: {
+                    senderId: userId,  // since sender is a teacher
+                    receiverId: post.author.id,
+                    notificationType: 'comment',
+                    date: new Date(),
+                    postId: postId,
+                    notificationData: {
+                        message: `${user.name} commented on your post.`,
+                        title: post.title   // adjust as needed with post.title or similar field
+                    },
+                    read: false,
+                }
+            });
+            notificationPromises.push(authorNotification);
+            socket.getIO().to(post.author.id).emit('notification', authorNotification);
+        }
+
+        // Wait for notification creations to complete if required (optional).
         await Promise.all(notificationPromises);
 
-        res.status(201).send({ ...comment, author: { userId }, commentVotes: [] });
-
+        // Return a unified response.
+        return res.send({ comment, success: true, message: 'Comment created and notifications sent.' });
     } catch (error) {
         console.error("Error creating comment:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -656,75 +641,97 @@ router.post('/likes/comment/:commentId', async (req, res) => {
 // Like a post
 router.post('/likes/post/:postId', authMiddleware('student'), async (req, res) => {
     try {
-        const { postId } = req.params;
-        const { userId } = req;
-        const currentUser = await prisma.student.findUnique({
-            where: { id: userId },
-            select: { id: true, name: true }, // Include avatar if needed
-        });
-        const post = await prisma.community.findUnique({
-            where: {
-                id: postId
-            },
-            select: {
-                id: true, authorId: true
-            }
-        })
-        const like = await prisma.postLike.findFirst({
-            where: {
-                postId: postId,
-                userId: userId,
-            },
-            select: {
-                id: true,
-            },
-        });
-
-        if (!post) {
-            return res.status(404).json({ error: "Post not found" });
-        }
-        console.log(userId)
-
-        if (like) {
-            await prisma.postLike.delete({
+            const { postId } = req.params;
+            const { userId } = req;
+            const currentUser = await prisma.student.findUnique({
+                where: { id: userId },
+                select: { id: true, name: true },
+            });
+            const post = await prisma.community.findUnique({
                 where: {
-                    id: like.id,
+                    id: postId
                 },
-            });
-            return res.send({ success: true, message: 'Comment unliked' });
-        } else {
-            console.log(postId)
-            console.log(userId)
-            await prisma.postLike.create({
-                data: {
-                    postId,
-                    userId,
-                },
-            });
-
-            const notification = await prisma.notification.create({
-                data: {
-                    senderId: userId,
-                    receiverId: post.authorId,
-                    notificationType: 'like',
-                    date: new Date(),
-                    postId: postId,
-                    notificationData: {
-                        message: `${currentUser.name} liked your post`,
-                        title: post.title
-                    },
-                    read: false,
+                select: {
+                    id: true, teacherId: true, authorId: true
                 }
             })
-            console.log('Initiating emit');
-            socket.getIO().to(post.authorId).emit('notification', notification)
-            console.log('Emit successfull')
-            return res.send({ success: true, message: 'Comment liked' });
+            const like = await prisma.postLike.findFirst({
+                where: {
+                    postId: postId,
+                    userId: userId,
+                },
+                select: {
+                    id: true,
+                },
+            });
+    
+            if (!post) {
+                return res.status(404).json({ error: "Post not found" });
+            }
+            console.log(userId)
+    
+            if (like) {
+                await prisma.postLike.delete({
+                    where: {
+                        id: like.id,
+                    },
+                });
+                return res.send({ success: true, message: 'Comment unliked' });
+            } else {
+                console.log(postId)
+                console.log(userId)
+                await prisma.postLike.create({
+                    data: {
+                        postId,
+                        userId: userId,
+                    },
+                });
+                if (post.teacherId) {
+                    console.log('teacher')
+                    const notification = await prisma.notification.create({
+                        data: {
+                            senderId: userId,
+                            teacherreceiverId: post.teacherId,
+                            notificationType: 'like',
+                            date: new Date(),
+                            postId: postId,
+                            notificationData: {
+                                message: `${currentUser.name} liked your post`,
+                                title: post.title
+                            },
+                            read: false,
+                        }
+                    })
+                    console.log('Initiating emit');
+                    socket.getIO().to(post.teacherId).emit('notification', notification)
+                    console.log('Emit successfull')
+                    return res.send({ success: true, message: 'Comment liked' });
+                }
+                if (post.authorId&&(post.authorId!==userId)) {
+                    const notification = await prisma.notification.create({
+                        data: {
+                            senderId: userId,
+                            receiverId: post.authorId,
+                            notificationType: 'like',
+                            date: new Date(),
+                            postId: postId,
+                            notificationData: {
+                                message: `${currentUser.name} liked your post`,
+                                title: post.title
+                            },
+                            read: false,
+                        }
+                    })
+                    console.log('Initiating emit');
+                    socket.getIO().to(post.teacherId).emit('notification', notification)
+                    console.log('Emit successfull')
+                    return res.send({ success: true, message: 'Comment liked' });
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching likes:', error);
+            res.status(500).json({ message: 'Internal server error' });
         }
-    } catch (error) {
-        console.error('Error fetching likes:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
 });
 
 // Like a reply
@@ -827,129 +834,145 @@ router.get('/likes/comment/:commentId', async (req, res) => {
 });
 router.post('/reply/:commentId', authMiddleware('student'), async (req, res) => {
     try {
-        const { commentId } = req.params;
-        const { userId } = req;
-        const { message } = req.body;
-
-        if (!message) {
-            return res.status(400).send({ error: 'Please provide a message' });
-        }
-
-        if (!commentId) {
-            return res.status(400).send({ error: 'Please provide the comment id' });
-        }
-
-        const replyToReply = await prisma.commentReply.findUnique({
-            where: { id: commentId },
-            select: {
-                id: true,
-                parentCommentId: true,
-                author: { select: { id: true, name: true } }
+            const { commentId } = req.params;
+            const { userId } = req;
+            const { message } = req.body;
+    
+            if (!message) {
+                return res.status(400).send({ error: 'Please provide a message' });
             }
-        });
-
-        let comment, parentCommentId;
-
-        if (replyToReply) {
-            comment = await prisma.comments.findUnique({
-                where: { id: replyToReply.parentCommentId },
-                select: { postId: true }
-            });
-
-            parentCommentId = replyToReply.parentCommentId;
-        }
-        else {
-            comment = await prisma.comments.findUnique({
+    
+            if (!commentId) {
+                return res.status(400).send({ error: 'Please provide the comment id' });
+            }
+            const comment = await prisma.comments.findUnique({
                 where: { id: commentId },
                 select: {
                     id: true,
                     postId: true,
+                    post: { select: { id: true, title: true, authorId: true, teacherId: true } },
+                    teacher: { select: { id: true, name: true } },
                     author: { select: { id: true, name: true } }
                 }
-            });
-
+            })
             if (!comment) {
                 return res.status(404).send({ error: 'Comment not found' });
             }
-
-            parentCommentId = commentId;
-        }
-
-        const [post, currentUser] = await Promise.all([
-            prisma.community.findUnique({
-                where: { id: comment.postId },
-                select: { id: true, authorId: true, title: true }
-            }),
-            prisma.student.findUnique({
-                where: { id: userId },
-                select: { id: true, name: true }
-            })
-        ]);
-
-        const commentAuthor = replyToReply ? replyToReply.author.username : comment.author.username;
-        const replyContent = `@${commentAuthor} ${message}`;
-
-
-        await prisma.commentReply.create({
-            data: {
-                message: replyContent,
-                authorId: userId,
-                parentCommentId
+            const [post, currentUser] = await Promise.all([
+                prisma.community.findUnique({
+                    where: { id: comment.postId },
+                    select: { id: true, teacherId: true, title: true, authorId: true }
+                }),
+                prisma.student.findUnique({
+                    where: { id: userId },
+                    select: { id: true, name: true }
+                })
+            ]);
+    
+            const commentAuthor = comment.author?.name
+            const commentAuthorId = comment.author?.id;
+            const commentTeacher = comment.teacher?.name
+            const commentTeacherId = comment.teacher?.id;
+    
+            const replyContent = `${message}`;
+            await prisma.commentReply.create({
+                data: {
+                    message: replyContent,
+                    authorId: userId,
+                    parentCommentId: commentId
+                }
+            });
+    
+            const notificationPromises = [];
+            const postAuthorId = post.authorId
+            const postTeacherId = post.teacherId
+    
+            if (commentAuthorId && commentAuthorId !== postAuthorId) {
+                const notification = prisma.notification.create({
+                    data: {
+                        senderId: userId,
+                        receiverId: commentAuthorId,
+                        notificationType: 'reply',
+                        date: new Date(),
+                        postId: post.id,
+                        notificationData: {
+                            message: `${currentUser.name} replied: ${replyContent}`,
+                            title: post.title
+                        },
+                        read: false
+                    }
+                });
+    
+                notificationPromises.push(notification);
+                socket.getIO().to(commentAuthorId).emit('notification', notification);
             }
-        });
-
-        const notificationPromises = [];
-
-        const originalAuthorId = replyToReply ? replyToReply.author.id : comment.author.id;
-
-        if (originalAuthorId !== userId) {
-            const notification = prisma.notification.create({
-                data: {
-                    senderId: userId,
-                    receiverId: originalAuthorId,
-                    notificationType: 'reply',
-                    date: new Date(),
-                    postId: post.id,
-                    notificationData: {
-                        message: `${currentUser.username} replied: ${replyContent}`,
-                        title: post.title
-                    },
-                    read: false
-                }
-            });
-
-            notificationPromises.push(notification);
-            socket.getIO().to(originalAuthorId).emit('notification', notification);
+            if (commentTeacherId && commentTeacherId !== postTeacherId) {
+                const notification = prisma.notification.create({
+                    data: {
+                        senderId: userId,
+                        teacherreceiverId: commentTeacherId,
+                        notificationType: 'reply',
+                        date: new Date(),
+                        postId: post.id,
+                        notificationData: {
+                            message: `${currentUser.name} replied: ${replyContent}`,
+                            title: post.title
+                        },
+                        read: false
+                    }
+                });
+    
+                notificationPromises.push(notification);
+                socket.getIO().to(commentTeacherId).emit('notification', notification);
+            }
+            if (postAuthorId && commentAuthorId && (commentAuthorId === postAuthorId)) {
+                const commentNotification = prisma.notification.create({
+                    data: {
+                        senderId: userId, // since here sender is a student (or using senderId)
+                        receiverId: postAuthorId,
+                        notificationType: 'comment',
+                        date: new Date(),
+                        postId: post.id,
+                        notificationData: {
+                            message: `3 ${currentUser.name} commented on your post: ${message}`,
+                            title: post.title
+                        },
+                        read: false
+                    }
+                });
+    
+                notificationPromises.push(commentNotification);
+                socket.getIO().to(postAuthorId).emit('notification', commentNotification);
+            }
+    
+            // If the post owner is a teacher:
+            if (postTeacherId && commentTeacherId && (commentTeacherId === post.teacherId)) {
+                const commentNotification = prisma.notification.create({
+                    data: {
+                        senderId: userId,
+                        teacherreceiverId: postTeacherId,
+                        notificationType: 'comment',
+                        date: new Date(),
+                        postId: post.id,
+                        notificationData: {
+                            message: `4 ${currentUser.name} commented on your post: ${message}`,
+                            title: post.title
+                        },
+                        read: false
+                    }
+                });
+    
+                notificationPromises.push(commentNotification);
+                socket.getIO().to(postTeacherId).emit('notification', commentNotification);
+            }
+            await Promise.all(notificationPromises);
+    
+            res.status(201).send({ message: 'Reply created successfully and notifications sent.' });
+    
+        } catch (error) {
+            console.error("Error creating reply:", error);
+            res.status(500).send({ error: 'Internal server error' });
         }
-
-        if (post.userId !== originalAuthorId && post.userId !== userId) {
-            const notification = prisma.notification.create({
-                data: {
-                    senderId: userId,
-                    receiverId: post.authorId,
-                    notificationType: 'comment',
-                    date: new Date(),
-                    postId: post.id,
-                    notificationData: {
-                        message: `${currentUser.name} commented on your post: ${message}`,
-                        title: post.title
-                    },
-                    read: false
-                }
-            });
-
-            notificationPromises.push(notification);
-            socket.getIO().to(post.userId).emit('notification', notification);
-        }
-
-        await Promise.all(notificationPromises);
-
-        res.status(201).send({ message: 'Reply created successfully and notifications sent.' });
-
-    } catch (error) {
-        console.error("Error creating reply:", error);
-        res.status(500).send({ error: 'Internal server error' });
-    }
 });
 router.delete('/replies/:replyId', async (req, res) => {
     try {

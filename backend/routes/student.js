@@ -21,8 +21,8 @@ const signupSchema = zod.object({
     isPlaced: zod.boolean().optional(),
     FieldofInterest: zod.string(),
     placedCompany: zod.array(zod.string()).optional(),
-    cgpa:zod.string().optional(),
-    batch:zod.string()
+    cgpa: zod.string().optional(),
+    batch: zod.string()
 });
 
 async function hashPassword(password) {
@@ -32,13 +32,14 @@ async function hashPassword(password) {
 router.post('/signup', async (req, res) => {
     try {
         const body = req.body;
-        console.log(body);
+        console.log(body)
         const validation = signupSchema.safeParse(body);
-        console.log(validation);
+        console.log(validation)
         if (!validation.success) {
             return res.status(400).json({
                 message: "Incorrect inputs",
                 errors: validation.error.issues
+
             });
         }
 
@@ -63,9 +64,9 @@ router.post('/signup', async (req, res) => {
                 YearofGraduation: body.YearofGraduation,
                 isPlaced: body.isPlaced ?? false,
                 FieldofInterest: body.FieldofInterest,
-                cgpa:body.cgpa,
-                batch:body.batch
-                
+                cgpa: body.cgpa,
+                batch: body.batch
+
             }
         });
         const token = jwt.sign({ id: user.id, role: 'student' }, JWT_SECRET);
@@ -124,13 +125,13 @@ router.post('/signin', async (req, res) => {
 const profileUpdateSchema = zod.object({
     name: zod.string().optional(),
     email: zod.string().email().optional(),
-    password: zod.string().optional(),
     registernumber: zod.string().optional(),
     year: zod.string().optional(),
-    department: zod.string().optional(),
+    departmant: zod.string().optional(),
     YearofGraduation: zod.string().optional(),
     FieldofInterest: zod.string().optional(),
 });
+
 router.get('/profile', authMiddleware('student'), async (req, res) => {
     try {
         const profile = await prisma.student.findUnique({
@@ -151,7 +152,8 @@ router.get('/profile', authMiddleware('student'), async (req, res) => {
         await prisma.$disconnect();
     }
 })
-router.put('/updateProfile',authMiddleware('student'), async (req, res) => {
+
+router.put('/updateProfile', authMiddleware('student'), async (req, res) => {
     try {
         const body = req.body;
         const validation = profileUpdateSchema.safeParse(body);
@@ -173,11 +175,11 @@ router.put('/updateProfile',authMiddleware('student'), async (req, res) => {
                 email: body.email,
                 registernumber: body.registernumber,
                 year: body.year,
-                department: body.department,
-                YearofGraduation: body.YearofGraduation,
-                FieldofInterest: body.FieldofInterest,
+                departmant: body.departmant,
                 batch:body.batch,
                 cgpa:body.cgpa,
+                YearofGraduation: body.YearofGraduation,
+                FieldofInterest: body.FieldofInterest,
             }
         });
         return res.json(updatedUser);
@@ -194,7 +196,7 @@ const placementUpdateSchema = zod.object({
     isPlaced: zod.boolean().optional()
 });
 
-router.put('/updatePlacement',authMiddleware('student'), async (req, res) => {
+router.put('/updatePlacement', authMiddleware('student'), async (req, res) => {
     try {
         const body = req.body;
         const validation = placementUpdateSchema.safeParse(body);
@@ -229,7 +231,7 @@ const placedCompanySchema = zod.object({
     role: zod.string(),
 });
 
-router.post('/createPlacedCompany',authMiddleware('student'), async (req, res) => {
+router.post('/createPlacedCompany', authMiddleware('student'), async (req, res) => {
     try {
         const body = req.body;
         const validation = placedCompanySchema.safeParse(body);
@@ -266,9 +268,9 @@ const placedCompanyUpdateSchema = zod.object({
     role: zod.string().optional(),
 });
 
-router.put('/updatePlacedCompany/:id',authMiddleware('student'), async (req, res) => {
+router.put('/updatePlacedCompany/:id', authMiddleware('student'), async (req, res) => {
     try {
-        const body=req.body
+        const body = req.body
         const { id } = req.params;
         const validation = placedCompanyUpdateSchema.safeParse(body);
         if (!validation.success) {
@@ -277,7 +279,6 @@ router.put('/updatePlacedCompany/:id',authMiddleware('student'), async (req, res
                 errors: validation.error.issues
             });
         }
-
         const updatedPlacedCompany = await prisma.placedCompany.update({
             where: { id: id },
             data: {
@@ -298,7 +299,7 @@ router.put('/updatePlacedCompany/:id',authMiddleware('student'), async (req, res
         await prisma.$disconnect();
     }
 });
-router.get('/jobs',authMiddleware('student'), async (req, res) => {
+router.get('/jobs', authMiddleware('student'), async (req, res) => {
     try {
         const currentJobs = await prisma.jobs.findMany({
             where: { status: 'current' }

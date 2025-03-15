@@ -33,8 +33,8 @@ const init = (server) => {
     
 
     io.on('connection', (socket) => {
-        socket.join(socket.user.userId);
-        console.log('userId', socket.user.userId)
+        socket.join(socket.user.id);
+        console.log('userId', socket.user.id)
         console.log('Socket connected:', socket.id);
         socket.on('disconnect', () => {
             console.log('Socket disconnected:', socket.id);

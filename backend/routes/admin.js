@@ -150,7 +150,6 @@ router.post('/addJob', authMiddleware('admin'), async (req, res) => {
     }
 });
 
-
 const jobUpdateSchema = zod.object({
     CompanyName: zod.string().optional(),
     role: zod.string().optional(),
@@ -165,7 +164,7 @@ const jobUpdateSchema = zod.object({
     status: zod.string().optional(),
 });
 
-router.put('/updateJob/:id',authMiddleware('admin'), async (req, res) => {
+router.put('/updateJob/:id', authMiddleware('admin'), async (req, res) => {
     try {
         const body = req.body;
         const { id } = req.params;
@@ -205,7 +204,7 @@ router.put('/updateJob/:id',authMiddleware('admin'), async (req, res) => {
 });
 
 
-router.delete('/deleteJob/:id',authMiddleware('admin'), async (req, res) => {
+router.delete('/deleteJob/:id', authMiddleware('admin'), async (req, res) => {
     try {
         const { id } = req.params;
         await prisma.jobs.delete({
@@ -221,7 +220,7 @@ router.delete('/deleteJob/:id',authMiddleware('admin'), async (req, res) => {
         await prisma.$disconnect();
     }
 });
-router.get('/jobs',authMiddleware('admin'), async (req, res) => {
+router.get('/jobs', authMiddleware('admin'), async (req, res) => {
     try {
         const currentJobs = await prisma.jobs.findMany({
             where: { status: 'current' }

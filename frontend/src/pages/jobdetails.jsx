@@ -1,6 +1,6 @@
 import { SideNavBar } from "../components/SideNavbar";
 import { useLocation, useParams } from "react-router-dom";
-import { format } from "date-fns";
+import { format } from 'date-fns';
 import { useState } from "react";
 import JobHeader from "../components/jobHeader";
 function JobDetails() {
@@ -10,15 +10,17 @@ function JobDetails() {
   const deadline = new Date(job.deadline);
   const companyVisit = new Date(job.companyvisit);
   const [activeModal, setActiveModal] = useState(null);
-  const formattedDeadline = format(deadline, "MMMM do, yyyy");
-  const formattedCompanyVisit = format(companyVisit, "MMMM do, yyyy");
+  const formattedDeadline = format(deadline, 'MMMM do, yyyy');
+  const formattedCompanyVisit = format(companyVisit, 'MMMM do, yyyy');
   const Modal = ({ title, content, onClose }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl">
         <div className="p-6 border-b">
           <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
         </div>
-        <div className="p-6 max-h-[70vh] overflow-y-auto">{content}</div>
+        <div className="p-6 max-h-[70vh] overflow-y-auto">
+          {content}
+        </div>
         <div className="p-4 border-t bg-gray-50 flex justify-end rounded-b-lg">
           <button
             onClick={onClose}
@@ -34,7 +36,7 @@ function JobDetails() {
   // Truncate text helper
   const truncateText = (text, length = 100) => {
     if (text?.length > length) {
-      return text.substring(0, length) + "...";
+      return text.substring(0, length) + '...';
     }
     return text;
   };
@@ -46,19 +48,24 @@ function JobDetails() {
       onClick={() => setActiveModal({ title, content: modalContent })}
     >
       <h3 className="text-lg font-semibold text-gray-700 mb-2">{title}</h3>
-      <div className="space-y-2">{children}</div>
+      <div className="space-y-2">
+        {children}
+      </div>
     </div>
   );
   return (
     <div className=" object-fill min-h-screen">
       <SideNavBar></SideNavBar>
-      <div className="pl-64">
+
         <JobHeader></JobHeader>
-      </div>
-      <div className="pl-64 px-3 py-8">
+
+      <div className="px-3 py-12">
+
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-gradient-to-r from-purple-500 to-cyan-400 p-6">
-            <h1 className="text-3xl font-bold text-white">{job.CompanyName}</h1>
+            <h1 className="text-3xl font-bold text-white">
+              {job.CompanyName}
+            </h1>
             <div className="mt-2">
               <span className="px-3 py-1 text-sm bg-white/20 text-white rounded-full">
                 {job.status}
@@ -90,15 +97,11 @@ function JobDetails() {
                 >
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Position</span>
-                    <span className="font-medium">
-                      {truncateText(job.role, 30)}
-                    </span>
+                    <span className="font-medium">{truncateText(job.role, 30)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Package</span>
-                    <span className="font-medium">
-                      {truncateText(job.package, 20)}
-                    </span>
+                    <span className="font-medium">{truncateText(job.package, 20)}</span>
                   </div>
                 </InfoContainer>
 
@@ -112,18 +115,14 @@ function JobDetails() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-600">Department</span>
-                        <span className="font-medium">
-                          {job.department?.join(", ")}
-                        </span>
+                        <span className="font-medium">{job.department?.join(", ")}</span>
                       </div>
                     </div>
                   }
                 >
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Eligibility</span>
-                    <span className="font-medium">
-                      {truncateText(job.eligibility, 30)}
-                    </span>
+                    <span className="font-medium">{truncateText(job.eligibility, 30)}</span>
                   </div>
                 </InfoContainer>
               </div>
@@ -134,16 +133,12 @@ function JobDetails() {
                   modalContent={
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-600">
-                          Application Deadline
-                        </span>
+                        <span className="text-gray-600">Application Deadline</span>
                         <span className="font-medium">{formattedDeadline}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-600">Company Visit</span>
-                        <span className="font-medium">
-                          {formattedCompanyVisit}
-                        </span>
+                        <span className="font-medium">{formattedCompanyVisit}</span>
                       </div>
                     </div>
                   }
@@ -162,9 +157,7 @@ function JobDetails() {
                   title="Job Description"
                   modalContent={
                     <div className="prose max-w-none">
-                      <p className="text-gray-600 break-words whitespace-pre-line">
-                        {job.jobdescription}
-                      </p>
+                      <p className="text-gray-600 break-words whitespace-pre-line">{job.jobdescription}</p>
                     </div>
                   }
                 >
@@ -172,6 +165,7 @@ function JobDetails() {
                     {truncateText(job.jobdescription, 150)}
                   </p>
                 </InfoContainer>
+
               </div>
             </div>
 
@@ -183,18 +177,8 @@ function JobDetails() {
                 rel="noopener noreferrer"
               >
                 Apply Now
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
             </div>

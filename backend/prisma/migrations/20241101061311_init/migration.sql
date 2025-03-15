@@ -7,5 +7,4 @@
 */
 -- AlterTable
 ALTER TABLE `Student` DROP COLUMN `departmant`,
-    ADD COLUMN `department` VARCHAR(191) NOT NULL,
-    MODIFY `YearofGraduation` VARCHAR(191) NOT NULL;
+    ADD COLUMN `department` VARCHAR(191) NOT NULL;
