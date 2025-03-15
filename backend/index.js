@@ -6,7 +6,7 @@ const app=express();
 const http = require('http');
 const server = http.createServer(app);
 const io = socket.init(server);
-app.use(cors());
+app.use(cors({ origin: "https://futureforge-nine.vercel.app" }));
 app.use(express.json());
 app.use('/api/v1',rootRouter);
 app.use((err, req, res, next) => {

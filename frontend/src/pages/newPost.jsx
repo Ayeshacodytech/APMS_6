@@ -28,10 +28,13 @@ const NewPostForm = () => {
             formData.append("image", file);
 
             try {
-                const response = await fetch("http://localhost:3000/api/v1/community/upload-image", {
+                const response = await fetch(
+                  "https://futureforge-iota.vercel.app/api/v1/community/upload-image",
+                  {
                     method: "POST",
                     body: formData,
-                });
+                  }
+                );
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message);
 

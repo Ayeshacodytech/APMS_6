@@ -5,8 +5,8 @@ import NotificationCard from "./notificationCard";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 
-const socket = io("http://localhost:3000", {
-    auth: { token: document.cookie.split("token=")[1] }, // Extract token from cookies
+const socket = io("https://futureforge-iota.vercel.app", {
+  auth: { token: document.cookie.split("token=")[1] }, // Extract token from cookies
 });
 
 const Notifications = () => {

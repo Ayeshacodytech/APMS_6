@@ -80,7 +80,9 @@ export const selectNotificationsError = (state) => state.notifications.error;
 
 // WebSocket connection moved inside a function
 export const setupSocketListeners = (dispatch) => {
-    const socket = io("http://localhost:3000", { auth: { token } });
+    const socket = io("https://futureforge-iota.vercel.app", {
+      auth: { token },
+    });
 
     socket.on("newNotification", (notification) => {
         dispatch(addNewNotification(notification));
