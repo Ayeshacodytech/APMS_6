@@ -34,7 +34,7 @@ import AptitudeProfile from "./pages/aptitudeProfile.jsx";
 import TeacherAptitudehome from "./pages/teacheraptitudeHome.jsx";
 import TeacherAptitudeMCQs from "./components/teacheraptitudeMCQs.jsx";
 import TeacherAptitudemyMCQs from "./components/teacheraptitudemyMCQs.jsx";
-import AptitudeMCQ from "./components/AptitudeMCq.jsx";
+import AptitudeMCQ from "./components/AptitudeMCQ.jsx";
 import TeacherAptitudeProfile from "./pages/teacheraptitudeProfile.jsx";
 import TeacherNewResourceForm from "./pages/teachernewResource.jsx";
 import AddAptitudeMCQ from "./pages/addAptitudemcq.jsx";
