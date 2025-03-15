@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from 'js-cookie';
 
-const API_URL = "http://localhost:3000/api/v1/admin";  // Update as per your backend routes
+const API_URL = "https://futureforge-iota.vercel.app/api/v1/admin";  // Update as per your backend routes
 
 const getToken = () => Cookies.get("token");
 
@@ -16,7 +16,7 @@ const initialState = {
 export const fetchJobs = createAsyncThunk("jobs/fetchJobs", async (_, { rejectWithValue }) => {
     try {
         const token = getToken();
-        const response = await axios.get("http://localhost:3000/api/v1/student/jobs", {
+        const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/student/jobs", {
             headers: { Authorization: `Bearer ${token}` },
         });
         return response.data;

@@ -16,7 +16,7 @@ const token = Cookies.get("token") || "";
 export const fetchNotifications = createAsyncThunk("notifications/fetchNotifications", async () => {
     if (!token) throw new Error("Token not found");
 
-    const response = await axios.get("http://localhost:3000/api/v1/notification/teacher", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/notification/teacher", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -27,7 +27,7 @@ export const markNotificationRead = createAsyncThunk("notifications/markNotifica
     if (!token) throw new Error("Token not found");
 
     await axios.patch(
-        `http://localhost:3000/api/v1/notification/${notificationId}/read`,
+        `https://futureforge-iota.vercel.app/api/v1/notification/${notificationId}/read`,
         {}, // Empty body (if needed)
         { headers: { Authorization: `Bearer ${token}` } } // Headers should be the 3rd argument
     );

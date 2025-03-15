@@ -24,7 +24,7 @@ export const initialState = {
 
 // Fetch all MCQs
 export const fetchMCQs = createAsyncThunk("aptitude/fetchMCQs", async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/teacher/aptitude/mcqs", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data; // Assumes the API returns an array
@@ -32,7 +32,7 @@ export const fetchMCQs = createAsyncThunk("aptitude/fetchMCQs", async () => {
 
 // Fetch my MCQs
 export const fetchMyMCQs = createAsyncThunk("aptitude/fetchMyMCQs", async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/teacher/aptitude/mymcq", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mymcq", {
         headers: { Authorization: `Bearer ${token}` },
     });
     console.log("my mcqs redux", response.data)
@@ -41,7 +41,7 @@ export const fetchMyMCQs = createAsyncThunk("aptitude/fetchMyMCQs", async () => 
 
 // Create a new MCQ
 export const createMCQ = createAsyncThunk("aptitude/createMCQ", async (mcqData) => {
-    const response = await axios.post("http://localhost:3000/api/v1/teacher/aptitude/mcqs", mcqData, {
+    const response = await axios.post("https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs", mcqData, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -49,7 +49,7 @@ export const createMCQ = createAsyncThunk("aptitude/createMCQ", async (mcqData) 
 
 // Delete an MCQ
 export const deleteMCQ = createAsyncThunk("aptitude/deleteMCQ", async (mcqId) => {
-    await axios.delete(`http://localhost:3000/api/v1/teacher/aptitude/mcqs/${mcqId}`, {
+    await axios.delete(`https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs/${mcqId}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return mcqId;
@@ -57,7 +57,7 @@ export const deleteMCQ = createAsyncThunk("aptitude/deleteMCQ", async (mcqId) =>
 
 // Optionally, fetch a single MCQ by ID if needed
 export const fetchMCQById = createAsyncThunk("aptitude/fetchMCQById", async (mcqId) => {
-    const response = await axios.get(`http://localhost:3000/api/v1/teacher/aptitude/mcqs/${mcqId}`, {
+    const response = await axios.get(`https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs/${mcqId}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -69,7 +69,7 @@ export const fetchMCQById = createAsyncThunk("aptitude/fetchMCQById", async (mcq
 
 // Fetch all Resources
 export const fetchResources = createAsyncThunk("aptitude/fetchResources", async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/teacher/aptitude/resources", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -77,7 +77,7 @@ export const fetchResources = createAsyncThunk("aptitude/fetchResources", async 
 
 // Fetch my Resources
 export const fetchMyResources = createAsyncThunk("aptitude/fetchMyResources", async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/teacher/aptitude/myresources", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/myresources", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -85,7 +85,7 @@ export const fetchMyResources = createAsyncThunk("aptitude/fetchMyResources", as
 
 // Fetch a single Resource by ID
 export const fetchResourceById = createAsyncThunk("aptitude/fetchResourceById", async (resourceId) => {
-    const response = await axios.get(`http://localhost:3000/api/v1/teacher/aptitude/resources/${resourceId}`, {
+    const response = await axios.get(`https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources/${resourceId}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -93,7 +93,7 @@ export const fetchResourceById = createAsyncThunk("aptitude/fetchResourceById", 
 
 // Create a new Resource
 export const createResource = createAsyncThunk("aptitude/createResource", async (resourceData) => {
-    const response = await axios.post("http://localhost:3000/api/v1/teacher/aptitude/resources", resourceData, {
+    const response = await axios.post("https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources", resourceData, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -101,7 +101,7 @@ export const createResource = createAsyncThunk("aptitude/createResource", async 
 
 // Delete a Resource
 export const deleteResource = createAsyncThunk("aptitude/deleteResource", async (resourceId) => {
-    await axios.delete(`http://localhost:3000/api/v1/teacher/aptitude/resources/${resourceId}`, {
+    await axios.delete(`https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources/${resourceId}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return resourceId;

@@ -13,7 +13,7 @@ const initialState = {
 const token = Cookies.get("token");
 //Fetch my posts
 export const fetchMyPosts = createAsyncThunk("teachercommunity/fetchMyPosts", async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/teacher/community/myposts", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/teacher/community/myposts", {
         headers: { Authorization: `Bearer ${token}` },
     });
     console.log("myposts:",response.data)
@@ -21,7 +21,7 @@ export const fetchMyPosts = createAsyncThunk("teachercommunity/fetchMyPosts", as
 });
 // Fetch all posts
 export const fetchPosts = createAsyncThunk("teachercommunity/fetchPosts", async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/teacher/community/posts", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/teacher/community/posts", {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -29,7 +29,7 @@ export const fetchPosts = createAsyncThunk("teachercommunity/fetchPosts", async 
 
 // Fetch a single post
 export const fetchPostById = createAsyncThunk("teachercommunity/fetchPostById", async (postId) => {
-    const response = await axios.get(`http://localhost:3000/api/v1/teacher/community/posts/${postId}`, {
+    const response = await axios.get(`https://futureforge-iota.vercel.app/api/v1/teacher/community/posts/${postId}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     console.log("post deta:",response.data)
@@ -39,7 +39,7 @@ export const fetchPostById = createAsyncThunk("teachercommunity/fetchPostById", 
 
 // Create a new post
 export const createPost = createAsyncThunk("teachercommunity/createPost", async (postData, { rejectWithValue }) => {
-    const response = await axios.post("http://localhost:3000/api/v1/teacher/community/newpost", postData, {
+    const response = await axios.post("https://futureforge-iota.vercel.app/api/v1/teacher/community/newpost", postData, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -47,7 +47,7 @@ export const createPost = createAsyncThunk("teachercommunity/createPost", async 
 
 // Delete a post
 export const deletePost = createAsyncThunk("teachercommunity/deletePost", async (postId) => {
-    await axios.delete(`http://localhost:3000/api/v1/teacher/community/post/${postId}`, {
+    await axios.delete(`https://futureforge-iota.vercel.app/api/v1/teacher/community/post/${postId}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return postId;
@@ -56,14 +56,14 @@ export const deletePost = createAsyncThunk("teachercommunity/deletePost", async 
 // Like a post (Fixed API endpoint)
 export const likePost = createAsyncThunk("teachercommunity/likePost", async (postId) => {
     const response = await axios.post(
-        `http://localhost:3000/api/v1/teacher/community/likes/post/${postId}`,
+        `https://futureforge-iota.vercel.app/api/v1/teacher/community/likes/post/${postId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
     );
     return { postId, userHasLiked: response.data.userHasLiked };
 });
 export const fetchPostLikes = createAsyncThunk("teachercommunity/fetchPostLikes", async (postId) => {
-    const response = await axios.get(`http://localhost:3000/api/v1/teacher/community/posts/${postId}/likes`, {
+    const response = await axios.get(`https://futureforge-iota.vercel.app/api/v1/teacher/community/posts/${postId}/likes`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return { postId, likesData: response.data };
@@ -71,7 +71,7 @@ export const fetchPostLikes = createAsyncThunk("teachercommunity/fetchPostLikes"
 
 // Fetch comments
 export const fetchComments = createAsyncThunk("teachercommunity/fetchComments", async (postId) => {
-    const response = await axios.get(`http://localhost:3000/api/v1/teacher/community/posts/${postId}/comments`, {
+    const response = await axios.get(`https://futureforge-iota.vercel.app/api/v1/teacher/community/posts/${postId}/comments`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return { postId, comments: response.data };
@@ -79,7 +79,7 @@ export const fetchComments = createAsyncThunk("teachercommunity/fetchComments", 
 
 // Add a comment
 export const addComment = createAsyncThunk("teachercommunity/addComment", async ({ postId, message }) => {
-    const response = await axios.post(`http://localhost:3000/api/v1/teacher/community/${postId}/comments`, { message }, {
+    const response = await axios.post(`https://futureforge-iota.vercel.app/api/v1/teacher/community/${postId}/comments`, { message }, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return { postId, comment: response.data };
@@ -87,7 +87,7 @@ export const addComment = createAsyncThunk("teachercommunity/addComment", async 
 
 // Reply to a comment
 export const replyToComment = createAsyncThunk("teachercommunity/replyToComment", async ({ commentId, message }) => {
-    const response = await axios.post(`http://localhost:3000/api/v1/teacher/community/reply/${commentId}`, { message }, {
+    const response = await axios.post(`https://futureforge-iota.vercel.app/api/v1/teacher/community/reply/${commentId}`, { message }, {
         headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;

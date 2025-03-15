@@ -28,11 +28,11 @@ export function useSignin() {
         setError("");
         try {
             const response = await axios.post(
-                "http://localhost:3000/api/v1/student/signin",
-                {
-                    email,
-                    password,
-                }
+              "https://futureforge-iota.vercel.app/api/v1/student/signin",
+              {
+                email,
+                password,
+              }
             );
             console.log(response.data.token);
 

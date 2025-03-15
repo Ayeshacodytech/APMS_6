@@ -25,7 +25,7 @@ const token = Cookies.get("token");
 
 // Fetch user profile
 export const fetchProfile = createAsyncThunk("user/fetchProfile", async () => {
-    const response = await axios.get("http://localhost:3000/api/v1/student/profile", {
+    const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/student/profile", {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -35,7 +35,7 @@ export const fetchProfile = createAsyncThunk("user/fetchProfile", async () => {
 
 // Update user profile
 export const updateProfile = createAsyncThunk("user/updateProfile", async (updatedData) => {
-    const response = await axios.put("http://localhost:3000/api/v1/student/updateProfile", updatedData, {
+    const response = await axios.put("https://futureforge-iota.vercel.app/api/v1/student/updateProfile", updatedData, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -45,7 +45,7 @@ export const updateProfile = createAsyncThunk("user/updateProfile", async (updat
 
 // Update placement status
 export const updatePlacementStatus = createAsyncThunk("user/updatePlacementStatus", async (isPlaced) => {
-    const response = await axios.put("http://localhost:3000/api/v1/student/updatePlacement", { isPlaced }, {
+    const response = await axios.put("https://futureforge-iota.vercel.app/api/v1/student/updatePlacement", { isPlaced }, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -55,7 +55,7 @@ export const updatePlacementStatus = createAsyncThunk("user/updatePlacementStatu
 
 // Create a placed company
 export const createPlacedCompany = createAsyncThunk("user/createPlacedCompany", async (companyData) => {
-    const response = await axios.post("http://localhost:3000/api/v1/student/createPlacedCompany", companyData, {
+    const response = await axios.post("https://futureforge-iota.vercel.app/api/v1/student/createPlacedCompany", companyData, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ export const createPlacedCompany = createAsyncThunk("user/createPlacedCompany", 
 
 // Update placed company details
 export const updatePlacedCompany = createAsyncThunk("user/updatePlacedCompany", async ({ id, companyData }) => {
-    const response = await axios.put(`http://localhost:3000/api/v1/student/updatePlacedCompany/${id}`, companyData, {
+    const response = await axios.put(`https://futureforge-iota.vercel.app/api/v1/student/updatePlacedCompany/${id}`, companyData, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

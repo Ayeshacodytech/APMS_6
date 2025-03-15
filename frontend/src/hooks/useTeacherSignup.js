@@ -41,12 +41,15 @@ export function useTeacherSignup() {
         console.log("done")
         try {
 
-            const response = await axios.post("http://localhost:3000/api/v1/teacher/signup", {
+            const response = await axios.post(
+              "https://futureforge-iota.vercel.app/api/v1/teacher/signup",
+              {
                 name: username,
                 email,
                 password,
                 department: department,
-            });
+              }
+            );
 
             console.log(response)
             console.log("User registered successfully");
