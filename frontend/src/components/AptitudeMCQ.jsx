@@ -11,7 +11,7 @@ import {
 } from '../store/slices/aptitudeSlice';
 import { SideNavBar } from './SideNavbar';
 import AptitudeHeader from './aptitudeHeader';
-
+import {Loading} from '../components/Loading';
 const AptitudeMCQ = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const AptitudeMCQ = () => {
     if ((status === 'loading' || status === 'idle') && !mcqDetails) {
         return (
             <div className="container mx-auto px-4 py-8">
-                <p>Loading MCQ details...</p>
+                <Loading/>
             </div>
         );
     }
