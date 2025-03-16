@@ -23,7 +23,7 @@ const Notifications = () => {
             return;
         }
 
-        const socket = io("http://localhost:3000", { auth: { token } });
+        const socket = io("https://futureforge-iota.vercel.app", { auth: { token } });
 
         // Listen for new notifications
         socket.on("notification", (notification) => {
