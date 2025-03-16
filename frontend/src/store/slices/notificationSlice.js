@@ -91,7 +91,7 @@ export const setupSocketListeners = (dispatch) => {
         return null;
     }
 
-    const socket = io("http://localhost:3000", { auth: { token } });
+    const socket = io("https://futureforge-iota.vercel.app", { auth: { token } });
 
     socket.on("connect_error", (err) => {
         console.error("WebSocket connection error:", err.message);
