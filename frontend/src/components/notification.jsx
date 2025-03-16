@@ -1,13 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotifications, markNotificationRead, selectNotifications, selectUnreadCount } from "../store/slices/notificationSlice";
+import { fetchNotifications, markNotificationRead, selectNotifications, selectUnreadCount, addNewNotification } from "../store/slices/notificationSlice";
 import NotificationCard from "./notificationCard";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-
-const socket = io("https://futureforge-iota.vercel.app", {
-  auth: { token: document.cookie.split("token=")[1] }, // Extract token from cookies
-});
+import Cookies from "js-cookie";
 
 const Notifications = () => {
     const dispatch = useDispatch();
@@ -19,30 +16,47 @@ const Notifications = () => {
         // Fetch notifications on mount
         dispatch(fetchNotifications());
 
-        // Listen for new notifications via Socket.IO
+        // Initialize Socket.IO connection
+        const token = Cookies.get("token");
+        if (!token) {
+            console.error("Token not found. Unable to connect to socket.");
+            return;
+        }
+
+        const socket = io("http://localhost:3000", { auth: { token } });
+
+        // Listen for new notifications
         socket.on("newNotification", (notification) => {
-            dispatch({ type: "notifications/addNewNotification", payload: notification });
+            dispatch(addNewNotification(notification));
         });
 
+        // Handle connection errors
+        socket.on("connect_error", (err) => {
+            console.error("Socket connection error:", err.message);
+        });
+
+        // Cleanup on component unmount
         return () => {
             socket.off("newNotification");
+            socket.disconnect();
         };
     }, [dispatch]);
 
     const handleNotificationClick = async (postId, notifId) => {
         if (!postId || !notifId) return;
-    
+
         try {
             const resultAction = await dispatch(markNotificationRead(notifId));
             if (markNotificationRead.fulfilled.match(resultAction)) {
                 navigate(`/community/${postId}`);
+            } else {
+                console.error("Failed to mark notification as read");
             }
         } catch (error) {
             console.error("Error marking notification as read:", error);
         }
     };
-    
-    
+
     return (
         <div className="max-w-lg mx-auto p-4 bg-white shadow-lg rounded-lg w-[400px] h-[400px] overflow-y-auto">
             <h2 className="text-lg font-semibold mb-3">
@@ -56,6 +70,9 @@ const Notifications = () => {
                         <NotificationCard
                             key={notif.id}
                             notif={notif}
+                            className={`p-3 rounded-md cursor-pointer ${
+                                notif.read ? "bg-gray-100" : "bg-blue-100 font-semibold"
+                            }`}
                             onClick={() => handleNotificationClick(notif.postId, notif.id)}
                         />
                     ))
