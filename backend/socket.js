@@ -1,3 +1,4 @@
+// socket.js
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 
@@ -6,25 +7,29 @@ let io;
 const init = (server) => {
     io = new Server(server, {
         cors: {
-            origin: 'https://futureforge-nine.vercel.app',
-            methods: ['GET', 'POST'],
+            origin: 'https://futureforge-nine.vercel.app', // Allow client domain
+            methods: ['GET', 'POST']
         }
     });
 
+    // Middleware for authenticating socket connections
     io.use((socket, next) => {
-        const token = socket.handshake.auth.token; // Ensure auth is used here
+        const token = socket.handshake.auth.token;
         if (token) {
             try {
                 const user = jwt.verify(token, process.env.JWT_SECRET);
                 console.log("Decoded user:", user);
 
+                // Ensure user and role are present
                 if (!user || !user.role) {
                     return next(new Error("Not authorized: Invalid user or missing role"));
                 }
 
+                // Check for valid roles
                 const validRoles = ["student", "teacher"];
                 if (validRoles.includes(user.role)) {
-                    socket.user = { id: user.id, role: user.role }; // Attach user to socket
+                    // Attach user information to the socket
+                    socket.user = { id: user.id, role: user.role };
                     return next();
                 } else {
                     return next(new Error("Not authorized: Role not recognized"));
@@ -38,26 +43,26 @@ const init = (server) => {
         }
     });
 
-
-
-
+    // Handle socket connections
     io.on('connection', (socket) => {
         console.log(`Connected: ${socket.id}, Role: ${socket.user.role}`);
 
+        // You can implement role-specific logic here:
         if (socket.user.role === 'student') {
             console.log('A student connected.');
-            // Handle student-specific logic
         } else if (socket.user.role === 'teacher') {
             console.log('A teacher connected.');
-            // Handle teacher-specific logic
         }
+
+        // Optionally, join the user to a room based on their id
         socket.join(socket.user.id);
         console.log(`User ${socket.user.id} joined room ${socket.user.id}`);
+
+        // Log disconnections
         socket.on('disconnect', () => {
             console.log(`Disconnected: ${socket.id}, Role: ${socket.user.role}`);
         });
     });
-
 
     return io;
 };
