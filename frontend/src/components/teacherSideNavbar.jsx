@@ -1,150 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../auth/authContext";
 
-// Navigation item data
-const navItems = [
-  {
-    name: "Home",
-    path: "/teacher/home",
-    icon: (
-      <svg
-        width="20px"
-        height="20px"
-        viewBox="0 -0.5 21 21"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        fill="#FFFFFF"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-
-          <title>home [#1391]</title> <desc>Created with Sketch.</desc>
-          <defs> </defs>
-          <g
-            id="Page-1"
-            stroke="none"
-            stroke-width="1"
-            fill="none"
-            fill-rule="evenodd"
-          >
-
-            <g
-              id="Dribbble-Light-Preview"
-              transform="translate(-419.000000, -720.000000)"
-              fill="#FFFFFF"
-            >
-
-              <g
-                id="icons"
-                transform="translate(56.000000, 160.000000)"
-              >
-
-                <path
-                  d="M379.79996,578 L376.649968,578 L376.649968,574 L370.349983,574 L370.349983,578 L367.19999,578 L367.19999,568.813 L373.489475,562.823 L379.79996,568.832 L379.79996,578 Z M381.899955,568.004 L381.899955,568 L381.899955,568 L373.502075,560 L363,569.992 L364.481546,571.406 L365.099995,570.813 L365.099995,580 L372.449978,580 L372.449978,576 L374.549973,576 L374.549973,580 L381.899955,580 L381.899955,579.997 L381.899955,570.832 L382.514204,571.416 L384.001,570.002 L381.899955,568.004 Z"
-                  id="home-[#1391]"
-                >
-
-                </path>
-              </g>
-            </g>
-          </g>
-        </g>
-      </svg>
-    )
-  },
-  {
-    name: "Community",
-    path: "/teacher/community",
-    icon: (
-      <svg
-        fill="#FFFFFF"
-        width="20px"
-        height="20px"
-        viewBox="0 0 128 128"
-        id="Layer_1"
-        version="1.1"
-        xml:space="preserve"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-
-          <g>
-
-            <polygon points="91,45 83,45 83,73 73,73 73,119 61,119 61,73 51,73 51,45 43,45 43,81 53,81 53,127 81,127 81,81 91,81 "></polygon>
-            <path d="M53,15c0,7.7,6.3,14,14,14s14-6.3,14-14S74.7,1,67,1S53,7.3,53,15z M73,15c0,3.3-2.7,6-6,6s-6-2.7-6-6s2.7-6,6-6 S73,11.7,73,15z"></path>
-            <path d="M19,25c0,7.7,6.3,14,14,14s14-6.3,14-14s-6.3-14-14-14S19,17.3,19,25z M39,25c0,3.3-2.7,6-6,6s-6-2.7-6-6s2.7-6,6-6 S39,21.7,39,25z"></path>
-            <polygon points="113,83 103,83 103,119 87,119 87,127 111,127 111,91 121,91 121,51 113,51 "></polygon>
-            <path d="M87,25c0,7.7,6.3,14,14,14s14-6.3,14-14s-6.3-14-14-14S87,17.3,87,25z M101,19c3.3,0,6,2.7,6,6s-2.7,6-6,6s-6-2.7-6-6 S97.7,19,101,19z"></path>
-            <polygon points="31,83 21,83 21,51 13,51 13,91 23,91 23,127 47,127 47,119 31,119 "></polygon>
-          </g>
-        </g>
-      </svg>
-    )
-  },
-  {
-    name: "Aptitude",
-    path: "/teacher/aptitude/home",
-    icon: (
-      <svg
-        fill="#ffffff"
-        width="20px"
-        height="20px"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="#ffffff"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-
-          <path d="M4,16 L4,8 L3.5,8 C3.22385763,8 3,7.77614237 3,7.5 C3,7.22385763 3.22385763,7 3.5,7 L4,7 L4,5.5 C4,4.11928813 5.11928813,3 6.5,3 L17.5,3 C18.8807119,3 20,4.11928813 20,5.5 L20,18.5 C20,19.8807119 18.8807119,21 17.5,21 L6.5,21 C5.11928813,21 4,19.8807119 4,18.5 L4,17 L3.5,17 C3.22385763,17 3,16.7761424 3,16.5 C3,16.2238576 3.22385763,16 3.5,16 L4,16 Z M5,16 L5.5,16 C5.77614237,16 6,16.2238576 6,16.5 C6,16.7761424 5.77614237,17 5.5,17 L5,17 L5,18.5 C5,19.3284271 5.67157288,20 6.5,20 L17.5,20 C18.3284271,20 19,19.3284271 19,18.5 L19,5.5 C19,4.67157288 18.3284271,4 17.5,4 L6.5,4 C5.67157288,4 5,4.67157288 5,5.5 L5,7 L5.5,7 C5.77614237,7 6,7.22385763 6,7.5 C6,7.77614237 5.77614237,8 5.5,8 L5,8 L5,16 Z M8.5,6 L15.5,6 C16.3284271,6 17,6.67157288 17,7.5 L17,9.5 C17,10.3284271 16.3284271,11 15.5,11 L8.5,11 C7.67157288,11 7,10.3284271 7,9.5 L7,7.5 C7,6.67157288 7.67157288,6 8.5,6 Z M8.5,7 C8.22385763,7 8,7.22385763 8,7.5 L8,9.5 C8,9.77614237 8.22385763,10 8.5,10 L15.5,10 C15.7761424,10 16,9.77614237 16,9.5 L16,7.5 C16,7.22385763 15.7761424,7 15.5,7 L8.5,7 Z"></path>
-        </g>
-      </svg>
-    )
-  },
-  {
-    name: "Gate",
-    path: "/teacher/gate",
-    icon: (
-      <svg
-        fill="#ffffff"
-        width="20px"
-        height="20px"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="#ffffff"
-      >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-
-          <path d="M4,16 L4,8 L3.5,8 C3.22385763,8 3,7.77614237 3,7.5 C3,7.22385763 3.22385763,7 3.5,7 L4,7 L4,5.5 C4,4.11928813 5.11928813,3 6.5,3 L17.5,3 C18.8807119,3 20,4.11928813 20,5.5 L20,18.5 C20,19.8807119 18.8807119,21 17.5,21 L6.5,21 C5.11928813,21 4,19.8807119 4,18.5 L4,17 L3.5,17 C3.22385763,17 3,16.7761424 3,16.5 C3,16.2238576 3.22385763,16 3.5,16 L4,16 Z M5,16 L5.5,16 C5.77614237,16 6,16.2238576 6,16.5 C6,16.7761424 5.77614237,17 5.5,17 L5,17 L5,18.5 C5,19.3284271 5.67157288,20 6.5,20 L17.5,20 C18.3284271,20 19,19.3284271 19,18.5 L19,5.5 C19,4.67157288 18.3284271,4 17.5,4 L6.5,4 C5.67157288,4 5,4.67157288 5,5.5 L5,7 L5.5,7 C5.77614237,7 6,7.22385763 6,7.5 C6,7.77614237 5.77614237,8 5.5,8 L5,8 L5,16 Z M8.5,6 L15.5,6 C16.3284271,6 17,6.67157288 17,7.5 L17,9.5 C17,10.3284271 16.3284271,11 15.5,11 L8.5,11 C7.67157288,11 7,10.3284271 7,9.5 L7,7.5 C7,6.67157288 7.67157288,6 8.5,6 Z M8.5,7 C8.22385763,7 8,7.22385763 8,7.5 L8,9.5 C8,9.77614237 8.22385763,10 8.5,10 L15.5,10 C15.7761424,10 16,9.77614237 16,9.5 L16,7.5 C16,7.22385763 15.7761424,7 15.5,7 L8.5,7 Z"></path>
-        </g>
-      </svg>
-    )
-  },
-];
 
 
 export function TeacherSideNavBar() {
@@ -152,7 +9,168 @@ export function TeacherSideNavBar() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
+  const {logout}=useAuth()
+  const navItems = [
+    {
+      name: "Home",
+      path: "/teacher/home",
+      icon: (
+        <svg
+          width="20px"
+          height="20px"
+          viewBox="0 -0.5 21 21"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          fill="#FFFFFF"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+  
+            <title>home [#1391]</title> <desc>Created with Sketch.</desc>
+            <defs> </defs>
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+  
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-419.000000, -720.000000)"
+                fill="#FFFFFF"
+              >
+  
+                <g
+                  id="icons"
+                  transform="translate(56.000000, 160.000000)"
+                >
+  
+                  <path
+                    d="M379.79996,578 L376.649968,578 L376.649968,574 L370.349983,574 L370.349983,578 L367.19999,578 L367.19999,568.813 L373.489475,562.823 L379.79996,568.832 L379.79996,578 Z M381.899955,568.004 L381.899955,568 L381.899955,568 L373.502075,560 L363,569.992 L364.481546,571.406 L365.099995,570.813 L365.099995,580 L372.449978,580 L372.449978,576 L374.549973,576 L374.549973,580 L381.899955,580 L381.899955,579.997 L381.899955,570.832 L382.514204,571.416 L384.001,570.002 L381.899955,568.004 Z"
+                    id="home-[#1391]"
+                  >
+  
+                  </path>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      )
+    },
+    {
+      name: "Community",
+      path: "/teacher/community",
+      icon: (
+        <svg
+          fill="#FFFFFF"
+          width="20px"
+          height="20px"
+          viewBox="0 0 128 128"
+          id="Layer_1"
+          version="1.1"
+          xml:space="preserve"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+  
+            <g>
+  
+              <polygon points="91,45 83,45 83,73 73,73 73,119 61,119 61,73 51,73 51,45 43,45 43,81 53,81 53,127 81,127 81,81 91,81 "></polygon>
+              <path d="M53,15c0,7.7,6.3,14,14,14s14-6.3,14-14S74.7,1,67,1S53,7.3,53,15z M73,15c0,3.3-2.7,6-6,6s-6-2.7-6-6s2.7-6,6-6 S73,11.7,73,15z"></path>
+              <path d="M19,25c0,7.7,6.3,14,14,14s14-6.3,14-14s-6.3-14-14-14S19,17.3,19,25z M39,25c0,3.3-2.7,6-6,6s-6-2.7-6-6s2.7-6,6-6 S39,21.7,39,25z"></path>
+              <polygon points="113,83 103,83 103,119 87,119 87,127 111,127 111,91 121,91 121,51 113,51 "></polygon>
+              <path d="M87,25c0,7.7,6.3,14,14,14s14-6.3,14-14s-6.3-14-14-14S87,17.3,87,25z M101,19c3.3,0,6,2.7,6,6s-2.7,6-6,6s-6-2.7-6-6 S97.7,19,101,19z"></path>
+              <polygon points="31,83 21,83 21,51 13,51 13,91 23,91 23,127 47,127 47,119 31,119 "></polygon>
+            </g>
+          </g>
+        </svg>
+      )
+    },
+    {
+      name: "Aptitude",
+      path: "/teacher/aptitude/home",
+      icon: (
+        <svg
+          fill="#ffffff"
+          width="20px"
+          height="20px"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          stroke="#ffffff"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+  
+            <path d="M4,16 L4,8 L3.5,8 C3.22385763,8 3,7.77614237 3,7.5 C3,7.22385763 3.22385763,7 3.5,7 L4,7 L4,5.5 C4,4.11928813 5.11928813,3 6.5,3 L17.5,3 C18.8807119,3 20,4.11928813 20,5.5 L20,18.5 C20,19.8807119 18.8807119,21 17.5,21 L6.5,21 C5.11928813,21 4,19.8807119 4,18.5 L4,17 L3.5,17 C3.22385763,17 3,16.7761424 3,16.5 C3,16.2238576 3.22385763,16 3.5,16 L4,16 Z M5,16 L5.5,16 C5.77614237,16 6,16.2238576 6,16.5 C6,16.7761424 5.77614237,17 5.5,17 L5,17 L5,18.5 C5,19.3284271 5.67157288,20 6.5,20 L17.5,20 C18.3284271,20 19,19.3284271 19,18.5 L19,5.5 C19,4.67157288 18.3284271,4 17.5,4 L6.5,4 C5.67157288,4 5,4.67157288 5,5.5 L5,7 L5.5,7 C5.77614237,7 6,7.22385763 6,7.5 C6,7.77614237 5.77614237,8 5.5,8 L5,8 L5,16 Z M8.5,6 L15.5,6 C16.3284271,6 17,6.67157288 17,7.5 L17,9.5 C17,10.3284271 16.3284271,11 15.5,11 L8.5,11 C7.67157288,11 7,10.3284271 7,9.5 L7,7.5 C7,6.67157288 7.67157288,6 8.5,6 Z M8.5,7 C8.22385763,7 8,7.22385763 8,7.5 L8,9.5 C8,9.77614237 8.22385763,10 8.5,10 L15.5,10 C15.7761424,10 16,9.77614237 16,9.5 L16,7.5 C16,7.22385763 15.7761424,7 15.5,7 L8.5,7 Z"></path>
+          </g>
+        </svg>
+      )
+    },
+    {
+      name: "Gate",
+      path: "/teacher/gate",
+      icon: (
+        <svg
+          fill="#ffffff"
+          width="20px"
+          height="20px"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          stroke="#ffffff"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+  
+            <path d="M4,16 L4,8 L3.5,8 C3.22385763,8 3,7.77614237 3,7.5 C3,7.22385763 3.22385763,7 3.5,7 L4,7 L4,5.5 C4,4.11928813 5.11928813,3 6.5,3 L17.5,3 C18.8807119,3 20,4.11928813 20,5.5 L20,18.5 C20,19.8807119 18.8807119,21 17.5,21 L6.5,21 C5.11928813,21 4,19.8807119 4,18.5 L4,17 L3.5,17 C3.22385763,17 3,16.7761424 3,16.5 C3,16.2238576 3.22385763,16 3.5,16 L4,16 Z M5,16 L5.5,16 C5.77614237,16 6,16.2238576 6,16.5 C6,16.7761424 5.77614237,17 5.5,17 L5,17 L5,18.5 C5,19.3284271 5.67157288,20 6.5,20 L17.5,20 C18.3284271,20 19,19.3284271 19,18.5 L19,5.5 C19,4.67157288 18.3284271,4 17.5,4 L6.5,4 C5.67157288,4 5,4.67157288 5,5.5 L5,7 L5.5,7 C5.77614237,7 6,7.22385763 6,7.5 C6,7.77614237 5.77614237,8 5.5,8 L5,8 L5,16 Z M8.5,6 L15.5,6 C16.3284271,6 17,6.67157288 17,7.5 L17,9.5 C17,10.3284271 16.3284271,11 15.5,11 L8.5,11 C7.67157288,11 7,10.3284271 7,9.5 L7,7.5 C7,6.67157288 7.67157288,6 8.5,6 Z M8.5,7 C8.22385763,7 8,7.22385763 8,7.5 L8,9.5 C8,9.77614237 8.22385763,10 8.5,10 L15.5,10 C15.7761424,10 16,9.77614237 16,9.5 L16,7.5 C16,7.22385763 15.7761424,7 15.5,7 L8.5,7 Z"></path>
+          </g>
+        </svg>
+      )
+    },
+    {
+          name: "Logout",
+          icon: (
+            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M21 12L13 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+          ),
+          onClick: () => {
+            logout();
+            navigate("/teacher/signin");
+          }
+        }
+  ];
   // Check screen size
   useEffect(() => {
     const checkScreenSize = () => {
