@@ -26,7 +26,7 @@ const Notifications = () => {
         const socket = io("http://localhost:3000", { auth: { token } });
 
         // Listen for new notifications
-        socket.on("newNotification", (notification) => {
+        socket.on("notification", (notification) => {
             dispatch(addNewNotification(notification));
         });
 
@@ -37,7 +37,7 @@ const Notifications = () => {
 
         // Cleanup on component unmount
         return () => {
-            socket.off("newNotification");
+            socket.off("notification");
             socket.disconnect();
         };
     }, [dispatch]);
