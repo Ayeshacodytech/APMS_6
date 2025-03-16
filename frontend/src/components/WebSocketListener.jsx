@@ -48,7 +48,7 @@ const WebSocketListener = () => {
 
         // Create a new socket instance or use the existing one
         if (!window._socketInstance) {
-            window._socketInstance = io("http://localhost:3000", {
+            window._socketInstance = io("https://futureforge-iota.vercel.app", {
                 auth: { token },
                 reconnection: true,
                 reconnectionAttempts: 5,
