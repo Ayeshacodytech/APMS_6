@@ -17,7 +17,7 @@ export const fetchNotifications = createAsyncThunk("notifications/fetchNotificat
     if (!token) throw new Error("Token not found");
 
     const response = await axios.get("https://futureforge-iota.vercel.app/api/v1/notification/teacher", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
     });
     return response.data;
 });
@@ -29,7 +29,7 @@ export const markNotificationRead = createAsyncThunk("notifications/markNotifica
     await axios.patch(
         `https://futureforge-iota.vercel.app/api/v1/notification/${notificationId}/read`,
         {}, // Empty body (if needed)
-        { headers: { Authorization: `Bearer ${token}` } } // Headers should be the 3rd argument
+        { headers: { Authorization: `Bearer ${Cookies.get("token")}` } } // Headers should be the 3rd argument
     );
     return notificationId;
 });
@@ -40,8 +40,11 @@ const notificationsSlice = createSlice({
     initialState,
     reducers: {
         addNewNotification: (state, action) => {
-            state.notifications.unshift(action.payload);
-            state.unreadCount += 1;
+            const exists = state.notifications.some((n) => n.id === action.payload.id);
+            if (!exists) {
+                state.notifications.unshift(action.payload);
+                state.unreadCount += 1;
+            }
         },
     },
     extraReducers: (builder) => {
@@ -49,11 +52,8 @@ const notificationsSlice = createSlice({
             .addCase(markNotificationRead.fulfilled, (state, action) => {
                 const notifIndex = state.notifications.findIndex(n => n.id === action.payload);
                 if (notifIndex !== -1) {
-                    state.notifications[notifIndex] = {
-                        ...state.notifications[notifIndex],
-                        read: true, // Ensure reactivity by creating a new object
-                    };
-                    state.unreadCount = state.notifications.filter(n => !n.read).length;
+                    state.notifications[notifIndex].read = true;
+                    state.unreadCount = state.notifications.filter((n) => !n.read).length;
                 }
             })
 
@@ -80,12 +80,25 @@ export const selectNotificationsError = (state) => state.notifications.error;
 
 // WebSocket connection moved inside a function
 export const setupSocketListeners = (dispatch) => {
-    const socket = io("https://futureforge-iota.vercel.app", {
-      auth: { token },
+    const token = getAuthToken();
+    if (!token) {
+        console.error("Cannot connect to WebSocket: Token not found");
+        return null;
+    }
+
+    const socket = io("http://localhost:3000", { auth: { token } });
+
+    socket.on("connect_error", (err) => {
+        console.error("WebSocket connection error:", err.message);
     });
 
-    socket.on("newNotification", (notification) => {
+    socket.on("notification", (notification) => {
+        console.log("New notification received:", notification);
         dispatch(addNewNotification(notification));
+    });
+
+    socket.on("disconnect", () => {
+        console.warn("Disconnected from WebSocket");
     });
 
     return socket;
