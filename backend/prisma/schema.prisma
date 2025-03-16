@@ -1,4 +1,5 @@
 // This is your Prisma schema file,
+// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
@@ -146,13 +147,14 @@ model CommentReply {
 model PostLike {
   id        String    @id @default(uuid())
   postId    String
-  post      community @relation(fields: [postId], references: [id])
+  post      community @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String?
   user      Student?   @relation(fields: [userId], references: [id])
-  teacher      Teacher?       @relation(fields: [teacherId], references: [id])
-  teacherId    String?
+  teacher   Teacher?   @relation(fields: [teacherId], references: [id])
+  teacherId String?
   createdAt DateTime? @default(now())
 }
+
 
 model CommentLike {
   id        String    @id @default(uuid())
