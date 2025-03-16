@@ -418,6 +418,107 @@ router.delete('/post/:postId', authMiddleware('teacher'), async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+// router.post('/:postId/comments', authMiddleware('teacher'), async (req, res) => {
+//     const { postId } = req.params;
+//     const { message } = req.body;
+//     const { userId } = req;
+
+//     if (!message) {
+//         return res.status(400).send({ error: 'Please provide a message with your comment.' });
+//     }
+
+//     try {
+//         // Retrieve the post with both teacher and author objects.
+//         const post = await prisma.community.findUnique({
+//             where: { id: postId },
+//             select: {
+//                 id: true,
+//                 title: true,
+//                 teacher: { select: { id: true, name: true } },
+//                 author: { select: { id: true, name: true } }
+//             }
+//         });
+
+//         // Check if the teacher (the sender) exists.
+//         const user = await prisma.teacher.findUnique({
+//             where: { id: userId },
+//             select: { id: true, name: true }
+//         });
+
+//         if (!post) {
+//             return res.status(404).send({ error: 'Post not found.' });
+//         }
+
+//         if (!user) {
+//             return res.status(404).send({ error: 'User not found.' });
+//         }
+
+//         // Create the comment.
+//         const comment = await prisma.comments.create({
+//             data: {
+//                 message,
+//                 teacherId: userId,
+//                 postId: postId,
+//             },
+//         });
+
+//         // Prepare an array for notifications.
+//         const notificationPromises = [];
+
+//         // Notify the post owner if a teacher is associated.
+//         if (post.teacher && (post.teacher.id !== userId)) {
+//             const teacherNotification = prisma.notification.create({
+//                 data: {
+//                     teachersenderId: userId,
+//                     teacherreceiverId: post.teacher.id,
+//                     notificationType: 'comment',
+//                     date: new Date(),
+//                     postId: postId,
+//                     notificationData: {
+//                         message: `1 Prof ${user.name} commented on your post.`,
+//                         title: post.title // or you might use post.title if that field is available 
+//                     },
+//                     read: false,
+//                 }
+//             });
+//             notificationPromises.push(teacherNotification);
+//             socket.getIO().to(post.teacher.id).emit('notification', teacherNotification);
+//         }
+
+//         // Notify the author of the post if available.
+//         // Notify the author of the post if available and if the sender isn't the author.
+//         if (post.author && post.author.id && post.author.id !== userId) {
+//             const authorNotification = await prisma.notification.create({
+//                 data: {
+//                     teachersenderId: userId,  // since sender is a teacher
+//                     receiverId: post.author.id,
+//                     notificationType: 'comment',
+//                     date: new Date(),
+//                     postId: postId,
+//                     notificationData: {
+//                         message: `Prof. ${user.name} commented on your post.`,
+//                         title: post.title   // adjust as needed with post.title or similar field
+//                     },
+//                     read: false,
+//                 }
+//             });
+//             notificationPromises.push(authorNotification);
+
+//             // Emit the notification after creation
+//             socket.getIO().to(post.author.id).emit('notification', authorNotification);
+//         }
+
+
+//         // Wait for notification creations to complete if required (optional).
+//         await Promise.all(notificationPromises);
+
+//         // Return a unified response.
+//         return res.send({ comment, success: true, message: 'Comment created and notifications sent.' });
+//     } catch (error) {
+//         console.error("Error creating comment:", error);
+//         res.status(500).json({ message: "Internal server error" });
+//     }
+// });
 router.post('/:postId/comments', authMiddleware('teacher'), async (req, res) => {
     const { postId } = req.params;
     const { message } = req.body;
@@ -464,10 +565,11 @@ router.post('/:postId/comments', authMiddleware('teacher'), async (req, res) => 
 
         // Prepare an array for notifications.
         const notificationPromises = [];
+        const io = socket.getIO();
 
         // Notify the post owner if a teacher is associated.
-        if (post.teacher && (post.teacher.id !== userId)) {
-            const teacherNotification = prisma.notification.create({
+        if (post.teacher && post.teacher.id !== userId) {
+            const teacherNotificationPromise = prisma.notification.create({
                 data: {
                     teachersenderId: userId,
                     teacherreceiverId: post.teacher.id,
@@ -475,20 +577,23 @@ router.post('/:postId/comments', authMiddleware('teacher'), async (req, res) => 
                     date: new Date(),
                     postId: postId,
                     notificationData: {
-                        message: `1 Prof ${user.name} commented on your post.`,
-                        title: post.title // or you might use post.title if that field is available 
+                        message: `Prof. ${user.name} commented on your post.`,
+                        title: post.title,
                     },
                     read: false,
-                }
+                },
+            }).then((teacherNotification) => {
+                io.to(post.teacher.id).emit('notification', teacherNotification);
+                console.log("Notification emitted to:", post.teacher.id, teacherNotification);
+
+                return teacherNotification;
             });
-            notificationPromises.push(teacherNotification);
-            socket.getIO().to(post.teacher.id).emit('notification', teacherNotification);
+            notificationPromises.push(teacherNotificationPromise);
         }
 
         // Notify the author of the post if available.
-        // Notify the author of the post if available and if the sender isn't the author.
         if (post.author && post.author.id && post.author.id !== userId) {
-            const authorNotification = await prisma.notification.create({
+            const authorNotificationPromise = prisma.notification.create({
                 data: {
                     teachersenderId: userId,  // since sender is a teacher
                     receiverId: post.author.id,
@@ -497,29 +602,30 @@ router.post('/:postId/comments', authMiddleware('teacher'), async (req, res) => 
                     postId: postId,
                     notificationData: {
                         message: `Prof. ${user.name} commented on your post.`,
-                        title: post.title   // adjust as needed with post.title or similar field
+                        title: post.title,
                     },
                     read: false,
-                }
-            });
-            notificationPromises.push(authorNotification);
+                },
+            }).then((authorNotification) => {
 
-            // Emit the notification after creation
-            socket.getIO().to(post.author.id).emit('notification', authorNotification);
+                io.to(post.author.id).emit('notification', authorNotification);
+                console.log("Notification emitted to:", post.author.id, authorNotification);
+
+                return authorNotification;
+            });
+            notificationPromises.push(authorNotificationPromise);
         }
 
-
-        // Wait for notification creations to complete if required (optional).
+        // Wait for all notifications to complete
         await Promise.all(notificationPromises);
 
         // Return a unified response.
         return res.send({ comment, success: true, message: 'Comment created and notifications sent.' });
     } catch (error) {
         console.error("Error creating comment:", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 });
-
 
 // Like a post
 router.post('/likes/post/:postId', authMiddleware('teacher'), async (req, res) => {
@@ -569,6 +675,7 @@ router.post('/likes/post/:postId', authMiddleware('teacher'), async (req, res) =
                     teacherId: userId,
                 },
             });
+            const notificationPromises = [];
             if (post.teacherId && (post.teacherId !== userId)) {
                 const notification = await prisma.notification.create({
                     data: {
@@ -583,11 +690,13 @@ router.post('/likes/post/:postId', authMiddleware('teacher'), async (req, res) =
                         },
                         read: false,
                     }
-                })
-                console.log('Initiating emit');
-                socket.getIO().to(post.teacherId).emit('notification', notification)
-                console.log('Emit successfull')
-                return res.send({ success: true, message: 'Comment liked' });
+                }).then((notification) => {
+                    socket.getIO().to(post.teacherId).emit('notification', notification)
+                    console.log("Notification emitted to:", post.teacherId, notification);
+                    return notification;
+                });
+                notificationPromises.push(notification);
+                
             }
             if (post.authorId) {
                 const notification = await prisma.notification.create({
@@ -603,13 +712,19 @@ router.post('/likes/post/:postId', authMiddleware('teacher'), async (req, res) =
                         },
                         read: false,
                     }
-                })
-                console.log('Initiating emit');
-                socket.getIO().to(post.teacherId).emit('notification', notification)
-                console.log('Emit successfull')
-                return res.send({ success: true, message: 'Comment liked' });
+                }).then((notification) => {
+                    socket.getIO().to(post.authorId).emit('notification', notification)
+                    console.log("Notification emitted to:", post.teacherId, notification);
+                    return notification;
+                });
+                
+                notificationPromises.push(notification);
             }
+            await Promise.all(notificationPromises);
+            return res.send({ success: true, message: 'post liked' });
         }
+        
+        
     } catch (error) {
         console.error('Error fetching likes:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -671,7 +786,7 @@ router.post('/reply/:commentId', authMiddleware('teacher'), async (req, res) => 
         const notificationPromises = [];
         const postAuthorId = post.authorId
         const postTeacherId = post.teacherId
-
+        
         if (commentAuthorId && commentAuthorId !== postAuthorId) {
             const notification = prisma.notification.create({
                 data: {
@@ -686,10 +801,13 @@ router.post('/reply/:commentId', authMiddleware('teacher'), async (req, res) => 
                     },
                     read: false
                 }
+            }).then((notification) => {
+                socket.getIO().to(commentAuthorId).emit('notification', notification)
+                console.log("Notification emitted to:", commentAuthorId, notification);
+                return notification;
             });
 
             notificationPromises.push(notification);
-            socket.getIO().to(commentAuthorId).emit('notification', notification);
         }
         if (commentTeacherId && commentTeacherId !== postTeacherId) {
             const notification = prisma.notification.create({
@@ -705,10 +823,13 @@ router.post('/reply/:commentId', authMiddleware('teacher'), async (req, res) => 
                     },
                     read: false
                 }
+            }).then((notification) => {
+                socket.getIO().to(commentTeacherId).emit('notification', notification)
+                console.log("Notification emitted to:", commentTeacherId, notification);
+                return notification;
             });
 
             notificationPromises.push(notification);
-            socket.getIO().to(commentTeacherId).emit('notification', notification);
         }
         if (postAuthorId && commentAuthorId && (commentAuthorId === postAuthorId)) {
             const commentNotification = prisma.notification.create({
@@ -724,10 +845,13 @@ router.post('/reply/:commentId', authMiddleware('teacher'), async (req, res) => 
                     },
                     read: false
                 }
+            }).then((notification) => {
+                socket.getIO().to(postAuthorId).emit('notification', notification)
+                console.log("Notification emitted to:", postAuthorId, notification);
+                return notification;
             });
 
             notificationPromises.push(commentNotification);
-            socket.getIO().to(postAuthorId).emit('notification', commentNotification);
         }
 
         // If the post owner is a teacher:
@@ -745,10 +869,13 @@ router.post('/reply/:commentId', authMiddleware('teacher'), async (req, res) => 
                     },
                     read: false
                 }
+            }).then((notification) => {
+                socket.getIO().to(postTeacherId).emit('notification', notification)
+                console.log("Notification emitted to:", postTeacherId, notification);
+                return notification;
             });
 
             notificationPromises.push(commentNotification);
-            socket.getIO().to(postTeacherId).emit('notification', commentNotification);
         }
         await Promise.all(notificationPromises);
 
