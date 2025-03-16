@@ -1,3 +1,5 @@
+//community.js
+
 const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
@@ -174,7 +176,6 @@ router.get("/myposts", authMiddleware('student'), async (req, res) => {
         await prisma.$disconnect();
     }
 });
-
 router.get('/posts/:postId', authMiddleware('student'), async (req, res) => {
     const { postId } = req.params;
     const userId = req.userId; // Get the current logged-in user
@@ -430,7 +431,7 @@ router.post('/:postId/comments', authMiddleware('student'), async (req, res) => 
 
         // Prepare an array for notifications.
         const notificationPromises = [];
-
+        const io=socket.getIO();
         // Notify the post owner if a teacher is associated.
         if (post.teacher && post.teacher.id) {
             const teacherNotification = prisma.notification.create({
@@ -446,10 +447,13 @@ router.post('/:postId/comments', authMiddleware('student'), async (req, res) => 
                     },
                     read: false,
                 }
-            });
+            }).then((notification) => {
+                io.to(post.teacher.id).emit('notification', notification);
+                console.log("Notification emitted to:", post.teacher.id, teacherNotification);
+                return notification;
+            })
             notificationPromises.push(teacherNotification);
-            socket.getIO().to(post.teacher.id).emit('notification', teacherNotification);
-        }
+        } 
 
         // Notify the author of the post if available.
         if (post.author && post.author.id!==userId) {
@@ -466,9 +470,12 @@ router.post('/:postId/comments', authMiddleware('student'), async (req, res) => 
                     },
                     read: false,
                 }
-            });
+            }).then((notification) => {
+                io.to(post.author.id).emit('notification', notification);
+                console.log("Notification emitted to:", post.author.id, authorNotification);
+                return notification;
+            })
             notificationPromises.push(authorNotification);
-            socket.getIO().to(post.author.id).emit('notification', authorNotification);
         }
 
         // Wait for notification creations to complete if required (optional).
@@ -686,6 +693,7 @@ router.post('/likes/post/:postId', authMiddleware('student'), async (req, res) =
                         userId: userId,
                     },
                 });
+                const notificationPromises = [];
                 if (post.teacherId) {
                     console.log('teacher')
                     const notification = await prisma.notification.create({
@@ -701,11 +709,12 @@ router.post('/likes/post/:postId', authMiddleware('student'), async (req, res) =
                             },
                             read: false,
                         }
+                    }).then((notification)=>{
+                        socket.getIO().to(post.teacherId).emit('notification', notification)
+                        console.log("Notification emitted to:", post.teacherId, notification);
+                        return notification;
                     })
-                    console.log('Initiating emit');
-                    socket.getIO().to(post.teacherId).emit('notification', notification)
-                    console.log('Emit successfull')
-                    return res.send({ success: true, message: 'Comment liked' });
+                    notificationPromises.push(notification);
                 }
                 if (post.authorId&&(post.authorId!==userId)) {
                     const notification = await prisma.notification.create({
@@ -721,12 +730,15 @@ router.post('/likes/post/:postId', authMiddleware('student'), async (req, res) =
                             },
                             read: false,
                         }
+                    }).then((notification)=>{
+                        socket.getIO().to(post.authorId).emit('notification', notification)
+                        console.log("Notification emitted to:", post.authorId, notification);
+                        return notification;
                     })
-                    console.log('Initiating emit');
-                    socket.getIO().to(post.teacherId).emit('notification', notification)
-                    console.log('Emit successfull')
-                    return res.send({ success: true, message: 'Comment liked' });
+                    notificationPromises.push(notification);
                 }
+                await Promise.all(notificationPromises);
+                return res.send({ success: true, message: 'Comment liked' });
             }
         } catch (error) {
             console.error('Error fetching likes:', error);
@@ -901,10 +913,12 @@ router.post('/reply/:commentId', authMiddleware('student'), async (req, res) => 
                         },
                         read: false
                     }
-                });
-    
+                }).then((notification) => {
+                    socket.getIO().to(commentAuthorId).emit('notification', notification);
+                    console.log("Notification emitted to:", commentAuthorId, notification);
+                    return notification;
+                })
                 notificationPromises.push(notification);
-                socket.getIO().to(commentAuthorId).emit('notification', notification);
             }
             if (commentTeacherId && commentTeacherId !== postTeacherId) {
                 const notification = prisma.notification.create({
@@ -920,10 +934,13 @@ router.post('/reply/:commentId', authMiddleware('student'), async (req, res) => 
                         },
                         read: false
                     }
-                });
+                }).then((notification) => {
+                    socket.getIO().to(commentTeacherId).emit('notification', notification);
+                    console.log("Notification emitted to:", commentTeacherId, notification);
+                    return notification;
+                })
     
                 notificationPromises.push(notification);
-                socket.getIO().to(commentTeacherId).emit('notification', notification);
             }
             if (postAuthorId && commentAuthorId && (commentAuthorId === postAuthorId)) {
                 const commentNotification = prisma.notification.create({
@@ -939,10 +956,12 @@ router.post('/reply/:commentId', authMiddleware('student'), async (req, res) => 
                         },
                         read: false
                     }
-                });
-    
+                }).then((notification) => {
+                    socket.getIO().to(postAuthorId).emit('notification', notification);
+                    console.log("Notification emitted to:", postAuthorId, notification);
+                    return notification;
+                })
                 notificationPromises.push(commentNotification);
-                socket.getIO().to(postAuthorId).emit('notification', commentNotification);
             }
     
             // If the post owner is a teacher:
@@ -960,10 +979,12 @@ router.post('/reply/:commentId', authMiddleware('student'), async (req, res) => 
                         },
                         read: false
                     }
-                });
-    
+                }).then((notification) => {
+                    socket.getIO().to(postTeacherId).emit('notification', notification);
+                    console.log("Notification emitted to:", postTeacherId, notification);
+                    return notification;
+                })
                 notificationPromises.push(commentNotification);
-                socket.getIO().to(postTeacherId).emit('notification', commentNotification);
             }
             await Promise.all(notificationPromises);
     
