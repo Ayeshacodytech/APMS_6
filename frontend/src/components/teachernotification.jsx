@@ -6,8 +6,8 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import TeacherNotificationCard from "./teachernotificationCard";
 
-const socket = io("https://futureforge-iota.vercel.app", {
-  auth: { token: document.cookie.split("token=")[1] }, // Extract token from cookies
+const socket = io("http://localhost:3000", {
+    auth: { token: document.cookie.split("token=")[1] }, // Extract token from cookies
 });
 
 const TeacherNotifications = () => {
@@ -21,12 +21,12 @@ const TeacherNotifications = () => {
         dispatch(fetchNotifications());
 
         // Listen for new notifications via Socket.IO
-        socket.on("newNotification", (notification) => {
+        socket.on("notification", (notification) => {
             dispatch({ type: "notifications/addNewNotification", payload: notification });
         });
 
         return () => {
-            socket.off("newNotification");
+            socket.off("notification");
         };
     }, [dispatch]);
 
