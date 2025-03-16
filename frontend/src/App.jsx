@@ -43,21 +43,11 @@ import { Updatejob } from "./pages/updatejob.jsx";
 import WebSocketListener from "./components/WebSocketListener.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { setupSocketDebug } from "./utils/SocketDebugUtils.js";
 import UnderDevelopment from "./components/Underdevlopment.jsx";
  // Import socket helpers
 
 function App() {
-  useEffect(() => {
-    // Wait a bit for socket to be established
-    const timer = setTimeout(() => {
-      if (window._socketInstance) {
-        setupSocketDebug(window._socketInstance);
-      }
-    }, 3000);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
