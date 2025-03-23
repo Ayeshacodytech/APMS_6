@@ -13,7 +13,10 @@ const server = http.createServer(app);
 const io = socket.init(server);
 
 // Enable CORS for your client origin
-app.use(cors({ origin: "https://futureforge-nine.vercel.app" }));
+app.use(cors({
+    origin: ["https://futureforge-nine.vercel.app", "http://localhost:3000"],
+    credentials: true,
+}));
 
 // Parse JSON payloads
 app.use(express.json());
