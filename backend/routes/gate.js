@@ -50,9 +50,9 @@ router.get("/mcqs/:id", authMiddleware('student'), async (req, res) => {
         const attempt = await prisma.gatemcqAttempt.findFirst({
             where: {
                 studentId,
-                mcqId,
+                gatemcqId,
             },
-            select: { mcqId: true },
+            select: { gatemcqId: true },
         });
 
         const attempted = attempt ? true : false;
