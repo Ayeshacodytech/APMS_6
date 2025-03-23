@@ -28,7 +28,7 @@ export const fetchMCQs = createAsyncThunk("aptitude/fetchMCQs", async () => {
   const response = await axios.get(
     "https://apms-6.onrender.com/api/v1/aptitude/mcqs",
     {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${Cookies.get("token")}` },
     }
   );
   return response.data;
@@ -41,7 +41,7 @@ export const fetchMCQById = createAsyncThunk(
     const response = await axios.get(
       `https://apms-6.onrender.com/api/v1/aptitude/mcqs/${mcqId}`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
     );
     return response.data;
@@ -56,7 +56,7 @@ export const attemptMCQ = createAsyncThunk(
       const response = await axios.post(
         `https://apms-6.onrender.com/api/v1/aptitude/mcqs/${mcqId}/attempt`,
         attemptData,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
       );
       return response.data;
     } catch (error) {
@@ -76,7 +76,7 @@ export const fetchResources = createAsyncThunk(
     const response = await axios.get(
       "https://apms-6.onrender.com/api/v1/aptitude/resources",
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
     );
     return response.data;
@@ -89,7 +89,7 @@ export const fetchResourceById = createAsyncThunk(
   async (resourceId) => {
     const response = await axios.get(
       `https://apms-6.onrender.com/api/v1/aptitude/resources/${resourceId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
     );
     return response.data;
   }
@@ -102,7 +102,7 @@ export const fetchMyResources = createAsyncThunk(
     const response = await axios.get(
       "https://apms-6.onrender.com/api/v1/aptitude/myresources",
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
     );
     return response.data;
@@ -118,7 +118,7 @@ export const createResource = createAsyncThunk(
       "https://apms-6.onrender.com/api/v1/aptitude/resources",
       resourceData,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
     );
     return response.data;
@@ -132,7 +132,7 @@ export const deleteResource = createAsyncThunk(
     await axios.delete(
       `https://apms-6.onrender.com/api/v1/aptitude/resources/${resourceId}`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
     );
     return resourceId;
