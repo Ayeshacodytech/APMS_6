@@ -11,6 +11,8 @@ import teachernotificationReducer from "./slices/teachernotificationSlice";
 import teacheraptitudeReducer from "./slices/teacherAptitudeslice";
 import aptitudeReducer from "./slices/aptitudeSlice";
 import socketReducer from "./slices/socketSlice";
+import teachergateReducer from "./slices/teacherGateslice";
+import gateReducer from "./slices/gateSlice";
 // Redux persist configuration
 const persistConfig = {
     key: "root",
@@ -28,6 +30,8 @@ const rootReducer = combineReducers({
     teacheraptitude: teacheraptitudeReducer,
     aptitude: aptitudeReducer,
     socket: socketReducer,
+    teachergate: teachergateReducer,
+    gate: gateReducer,
 });
 
 // Wrap the rootReducer with persistReducer
