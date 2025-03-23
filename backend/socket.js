@@ -7,7 +7,7 @@ let io;
 const init = (server) => {
     io = new Server(server, {
         cors: {
-            origin: 'https://futureforge-nine.vercel.app', // Allow client domain
+            origin: ["https://futureforge-nine.vercel.app","http://localhost:3000"],// Allow client domain
             methods: ['GET', 'POST']
         }
     });
