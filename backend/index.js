@@ -14,7 +14,7 @@ const io = socket.init(server);
 
 // Enable CORS for your client origin
 app.use(cors({
-    origin: ["https://futureforge-nine.vercel.app", "http://localhost:3000"],
+    origin: ["https://futureforge-nine.vercel.app", "http://localhost:5173"],
     credentials: true,
 }));
 
