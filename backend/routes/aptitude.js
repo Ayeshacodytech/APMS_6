@@ -188,8 +188,8 @@ router.get("/myresources", authMiddleware("student"), async (req, res) => {
             where: { addedByStudentId: studentId },
         });
 
-        if (resources.length === 0) {
-            return res.status(404).json({ message: "No resources found for this student" });
+        if (!resources || resources.length === 0) {
+            return res.status(200).json({ message: "No resources found", resources: [] });
         }
 
         res.json(resources);
