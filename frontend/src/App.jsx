@@ -44,6 +44,16 @@ import WebSocketListener from "./components/WebSocketListener.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import UnderDevelopment from "./components/Underdevlopment.jsx";
+import Gatehome from "./pages/gateHome.jsx";
+import GateMCQs from "./components/gateMCQs.jsx";
+import GateMCQ from "./components/GateMCQ.jsx";
+import NewGateResourceForm from "./pages/newGateResource.jsx";
+import GateProfile from "./pages/gateProfile.jsx";
+import AddGateMCQ from "./pages/addGatemcq.jsx";
+import TeacherGatehome from "./pages/teachergateHome.jsx";
+import TeacherGateMCQs from "./components/teachergateMCQs.jsx";
+import TeacherGatemyMCQs from "./components/teachergatemyMCQs.jsx";
+import TeacherGateProfile from "./pages/teacherGateProfile.jsx";
  // Import socket helpers
 
 function App() {
@@ -84,7 +94,11 @@ function App() {
               <Route path="/aptitude/mcq/:id" element={<AptitudeMCQ />} />
               <Route path="/aptitude" element={<Aptitudehome />} />
               <Route path="/code" element={<UnderDevelopment />} />
-              <Route path="/gate" element={<UnderDevelopment />} />
+              <Route path="/gate" element={<Gatehome />} />
+              <Route path="/gate/mcq" element={<GateMCQs />} />
+              <Route path="/gate/mcq/:id" element={<GateMCQ />} />
+              <Route path="/gate/new/resource" element={<NewGateResourceForm />} />
+              <Route path="/gate/myresources" element={<GateProfile />} />
               <Route path="/aptitude/new/resource" element={<NewResourceForm />} />
               <Route path="/teacher/aptitude/new/mcq" element={<AddAptitudeMCQ />} />
               <Route path="/teacher/aptitude/home" element={<TeacherAptitudehome />} />
@@ -92,6 +106,12 @@ function App() {
               <Route path="/teacher/aptitude/mymcq" element={<TeacherAptitudemyMCQs />} />
               <Route path="/teacher/aptitude/myresource" element={<TeacherAptitudeProfile />} />
               <Route path="/teacher/aptitude/new/resource" element={<TeacherNewResourceForm />} />
+              <Route path="/teacher/gate/new/mcq" element={<AddGateMCQ />} />
+              <Route path="/teacher/aptitude/home" element={<TeacherGatehome />} />
+              <Route path="/teacher/aptitude/mcq" element={<TeacherGateMCQs />} />
+              <Route path="/teacher/aptitude/mymcq" element={<TeacherGatemyMCQs />} />
+              <Route path="/teacher/aptitude/myresource" element={<TeacherGatehome />} />
+              <Route path="/teacher/aptitude/new/resource" element={<TeacherGateProfile />} />
               <Route path="/aptitude/myresources" element={<AptitudeProfile />} />
               <Route path="*" element={<Navigate to="/signin" replace />} />
             </Routes>
