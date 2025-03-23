@@ -52,7 +52,7 @@ router.get("/mcqs/:id", authMiddleware('student'), async (req, res) => {
                 studentId,
                 gatemcqId,
             },
-            select: { gatemcqId: true },
+            select: { mcqId: true },
         });
 
         const attempted = attempt ? true : false;
