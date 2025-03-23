@@ -29,7 +29,7 @@ export const fetchProfile = createAsyncThunk("user/fetchProfile", async () => {
     "https://apms-6.onrender.com/api/v1/student/profile",
     {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${Cookies.get("token")}`,
       },
     }
   );
@@ -45,7 +45,7 @@ export const updateProfile = createAsyncThunk(
       updatedData,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       }
     );
@@ -62,7 +62,7 @@ export const updatePlacementStatus = createAsyncThunk(
       { isPlaced },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       }
     );
@@ -79,7 +79,7 @@ export const createPlacedCompany = createAsyncThunk(
       companyData,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       }
     );
@@ -96,7 +96,7 @@ export const updatePlacedCompany = createAsyncThunk(
       companyData,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       }
     );
