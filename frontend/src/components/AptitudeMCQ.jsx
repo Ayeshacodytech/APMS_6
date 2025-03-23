@@ -11,7 +11,7 @@ import {
 } from '../store/slices/aptitudeSlice';
 import { SideNavBar } from './SideNavbar';
 import AptitudeHeader from './aptitudeHeader';
-import {Loading} from '../components/Loading';
+import Loading from '../components/Loading';
 const AptitudeMCQ = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
