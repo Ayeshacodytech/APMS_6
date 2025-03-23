@@ -32,6 +32,39 @@ router.get("/mcqs", authMiddleware('student'), async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+router.get("/mcqs/:id", authMiddleware('student'), async (req, res) => {
+    try {
+        const studentId = req.userId; // Ensure your auth middleware sets this correctly
+        const mcqId = req.params.id;
+
+        // Fetch the specific MCQ by its id
+        const mcq = await prisma.gatemcq.findUnique({
+            where: { id: mcqId },
+        });
+
+        if (!mcq) {
+            return res.status(404).json({ error: "MCQ not found" });
+        }
+
+        // Check if the student has attempted this specific MCQ
+        const attempt = await prisma.gatemcqAttempt.findFirst({
+            where: {
+                studentId,
+                mcqId,
+            },
+            select: { mcqId: true },
+        });
+
+        const attempted = attempt ? true : false;
+
+        // Attach the attempted status to the MCQ object
+        const mcqWithStatus = { ...mcq, attempted };
+
+        res.json(mcqWithStatus);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 router.post("/mcqs/:id/attempt", authMiddleware("student"), async (req, res) => {
     try {
         const { id } = req.params;
