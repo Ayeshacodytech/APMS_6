@@ -16,10 +16,11 @@ const AptitudeMCQs = () => {
 
     // Fetch MCQs when component mounts and the status is idle
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(fetchMCQs());
-        }
-    }, [status, dispatch]);
+
+        dispatch(fetchMCQs());
+
+    }, [dispatch]);
+
 
     // Filtering logic remains the same:
     const filteredMCQs = mcqs.filter(mcq => {
