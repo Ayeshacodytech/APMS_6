@@ -107,11 +107,11 @@ function App() {
               <Route path="/teacher/aptitude/myresource" element={<TeacherAptitudeProfile />} />
               <Route path="/teacher/aptitude/new/resource" element={<TeacherNewResourceForm />} />
               <Route path="/teacher/gate/new/mcq" element={<AddGateMCQ />} />
-              <Route path="/teacher/aptitude/home" element={<TeacherGatehome />} />
-              <Route path="/teacher/aptitude/mcq" element={<TeacherGateMCQs />} />
-              <Route path="/teacher/aptitude/mymcq" element={<TeacherGatemyMCQs />} />
-              <Route path="/teacher/aptitude/myresource" element={<TeacherGatehome />} />
-              <Route path="/teacher/aptitude/new/resource" element={<TeacherGateProfile />} />
+              <Route path="/teacher/gate/home" element={<TeacherGatehome />} />
+              <Route path="/teacher/gate/mcq" element={<TeacherGateMCQs />} />
+              <Route path="/teacher/gate/mymcq" element={<TeacherGatemyMCQs />} />
+              <Route path="/teacher/gate/myresource" element={<TeacherGatehome />} />
+              <Route path="/teacher/gate/new/resource" element={<TeacherGateProfile />} />
               <Route path="/aptitude/myresources" element={<AptitudeProfile />} />
               <Route path="*" element={<Navigate to="/signin" replace />} />
             </Routes>

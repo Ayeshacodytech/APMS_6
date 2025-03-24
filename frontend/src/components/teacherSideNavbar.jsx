@@ -129,7 +129,7 @@ export function TeacherSideNavBar() {
     },
     {
       name: "Gate",
-      path: "/teacher/gate",
+      path: "/teacher/gate/home",
       icon: (
         <svg
           fill="#ffffff"
@@ -166,7 +166,9 @@ export function TeacherSideNavBar() {
             </svg>
           ),
           onClick: () => {
+            console.log("start")
             logout();
+            console.log("logout")
             navigate("/teacher/signin");
           }
         }
