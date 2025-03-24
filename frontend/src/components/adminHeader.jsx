@@ -25,7 +25,7 @@ export default function AdminHeader() {
                     <button
                         className="p-2 hover:bg-indigo-50 rounded-xl transition-all"
                         title="Admin Home"
-                        onClick={() => navigate('/admin/addjob')} // Fixed here
+                        onClick={() => navigate('/admin/home')} // Fixed here
                     >
                         <svg fill="#6366F1" width="28px" height="28px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#6366F1">
                             <path d="M3.012,10.981,3,11H5v9a1,1,0,0,0,1,1H18a1,1,0,0,0,1-1V11h2a1,1,0,0,0,.555-1.832l-9-6a1,1,0,0,0-1.11,0l-9,6a1,1,0,0,0-.277,1.387A.98.98,0,0,0,3.012,10.981ZM10,14a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1v5H10Z"></path>
