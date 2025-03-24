@@ -283,7 +283,13 @@ export function TeacherSideNavBar() {
               <button
                 className={`bg-gradient-to-tl from-[#35fdf5] via-[#6f5eff] to-[#a935fd] font-bold text-white rounded-lg px-4 py-2 w-full flex items-center transition-transform hover:scale-105 ${location.pathname === item.path ? "ring-2 ring-white" : ""
                   }`}
-                onClick={() => handleNavigation(item.path)}
+                onClick={() => {
+                  if (item.onClick) {
+                    item.onClick(); // Use specific onClick for Logout
+                  } else {
+                    handleNavigation(item.path); // Default navigation for other items
+                  }
+                }}
                 aria-current={location.pathname === item.path ? "page" : undefined}
               >
                 <div className="mr-3 text-white">
