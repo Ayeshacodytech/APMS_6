@@ -243,5 +243,26 @@ router.get('/jobs', authMiddleware('admin'), async (req, res) => {
         await prisma.$disconnect();
     }
 });
-
+router.get("/problem", authMiddleware("admin"), async (req, res) => {
+    try {
+        const problems = await prisma.problem.findMany();
+        return res.status(200).json(problems);
+    } catch (err) {
+        console.error("Error fetching problems:", err);
+        return res.status(500).json({ message: "Server error" });
+    }
+});
+router.get("/problem/:id", authMiddleware("admin"), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const problem = await prisma.problem.findUnique({ where: { id: id } });
+        if (!problem) {
+            return res.status(404).json({ message: "Problem not found" });
+        }
+        res.json(problem);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 module.exports = router;
