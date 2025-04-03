@@ -26,6 +26,7 @@ model Student {
   cgpa                  String
   batch                 String
   isPlaced              Boolean            @default(false)
+  points                Int                @default(0)
   FieldofInterest       FieldofInterest
   placedCompany         placedCompany[]
   posts                 community[]
@@ -41,6 +42,7 @@ model Student {
   gateMcqAttempts       GatemcqAttempt[]
   resources             Resource[]
   gateresources         Gateresource[]
+  submissions           Submission[]
 }
 
 enum FieldofInterest {
@@ -55,12 +57,12 @@ model admin {
 }
 
 model Teacher {
-  id         String     @id @default(uuid())
-  name       String
-  email      String     @unique
-  password   String
-  department String
-  posts      community[]
+  id                    String             @id @default(uuid())
+  name                  String
+  email                 String             @unique
+  password              String
+  department            String
+  posts                 community[]
   sentNotifications     Notification[]     @relation("NotificationSender")
   receivedNotifications Notification[]     @relation("NotificationReceiver")
   Comments              Comments[]
@@ -69,8 +71,8 @@ model Teacher {
   CommentLike           CommentLike[]
   CommentReplyLike      CommentReplyLike[]
   Like                  Like[]
-  resources  Resource[]
-  gateresources Gateresource[]
+  resources             Resource[]
+  gateresources         Gateresource[]
 }
 
 model jobs {
@@ -103,7 +105,7 @@ model community {
   title        String
   content      String
   topic        String
-  author       Student?        @relation(fields: [authorId], references: [id])
+  author       Student?       @relation(fields: [authorId], references: [id])
   authorId     String?
   teacher      Teacher?       @relation(fields: [teacherId], references: [id])
   teacherId    String?
@@ -120,9 +122,9 @@ model Comments {
   message   String?
   date      DateTime       @default(now())
   authorId  String?
-  author    Student?        @relation(fields: [authorId], references: [id])
-  teacher      Teacher?       @relation(fields: [teacherId], references: [id])
-  teacherId    String?
+  author    Student?       @relation(fields: [authorId], references: [id])
+  teacher   Teacher?       @relation(fields: [teacherId], references: [id])
+  teacherId String?
   postId    String
   post      community      @relation(fields: [postId], references: [id], onDelete: Cascade)
   createdAt DateTime?      @default(now())
@@ -135,9 +137,9 @@ model CommentReply {
   message         String
   date            DateTime           @default(now())
   authorId        String?
-  author          Student?            @relation(fields: [authorId], references: [id])
-  teacher      Teacher?       @relation(fields: [teacherId], references: [id])
-  teacherId    String?
+  author          Student?           @relation(fields: [authorId], references: [id])
+  teacher         Teacher?           @relation(fields: [teacherId], references: [id])
+  teacherId       String?
   parentCommentId String
   parentComment   Comments           @relation(fields: [parentCommentId], references: [id], onDelete: Cascade)
   createdAt       DateTime?          @default(now())
@@ -149,21 +151,20 @@ model PostLike {
   postId    String
   post      community @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String?
-  user      Student?   @relation(fields: [userId], references: [id])
-  teacher   Teacher?   @relation(fields: [teacherId], references: [id])
+  user      Student?  @relation(fields: [userId], references: [id])
+  teacher   Teacher?  @relation(fields: [teacherId], references: [id])
   teacherId String?
   createdAt DateTime? @default(now())
 }
-
 
 model CommentLike {
   id        String    @id @default(uuid())
   commentId String
   comment   Comments  @relation(fields: [commentId], references: [id])
   userId    String?
-  user      Student?   @relation(fields: [userId], references: [id])
-  teacher      Teacher?       @relation(fields: [teacherId], references: [id])
-  teacherId    String?
+  user      Student?  @relation(fields: [userId], references: [id])
+  teacher   Teacher?  @relation(fields: [teacherId], references: [id])
+  teacherId String?
   createdAt DateTime? @default(now())
 }
 
@@ -173,39 +174,39 @@ model CommentReplyLike {
   commentReply   CommentReply @relation(fields: [commentReplyId], references: [id])
   userId         String
   user           Student      @relation(fields: [userId], references: [id])
-  teacher      Teacher?       @relation(fields: [teacherId], references: [id])
-  teacherId    String?
+  teacher        Teacher?     @relation(fields: [teacherId], references: [id])
+  teacherId      String?
   createdAt      DateTime?    @default(now())
 }
 
 model Like {
   id          String     @id @default(uuid())
   userId      String?
-  user        Student?    @relation(fields: [userId], references: [id])
+  user        Student?   @relation(fields: [userId], references: [id])
   createdAt   DateTime?  @default(now())
   community   community? @relation(fields: [communityId], references: [id])
-  teacher      Teacher?       @relation(fields: [teacherId], references: [id])
-  teacherId    String?
+  teacher     Teacher?   @relation(fields: [teacherId], references: [id])
+  teacherId   String?
   communityId String?
 }
 
 model Notification {
-  id               String           @id @default(uuid())
-  senderId         String?
-  sender           Student?          @relation("NotificationSender", fields: [senderId], references: [id])
-  receiverId       String?
-  receiver         Student?          @relation("NotificationReceiver", fields: [receiverId], references: [id])
-  teachersenderId  String?
+  id                String           @id @default(uuid())
+  senderId          String?
+  sender            Student?         @relation("NotificationSender", fields: [senderId], references: [id])
+  receiverId        String?
+  receiver          Student?         @relation("NotificationReceiver", fields: [receiverId], references: [id])
+  teachersenderId   String?
   teacherreceiverId String?
-  teachersender   Teacher?         @relation("NotificationSender", fields: [teachersenderId], references: [id])
-  teacherreceiver Teacher?         @relation("NotificationReceiver", fields: [teacherreceiverId], references: [id])
-  notificationType NotificationType
-  date             DateTime?
-  notificationData Json
-  postId           String?
-  post             community?       @relation(fields: [postId], references: [id])
-  
-  read             Boolean          @default(false)
+  teachersender     Teacher?         @relation("NotificationSender", fields: [teachersenderId], references: [id])
+  teacherreceiver   Teacher?         @relation("NotificationReceiver", fields: [teacherreceiverId], references: [id])
+  notificationType  NotificationType
+  date              DateTime?
+  notificationData  Json
+  postId            String?
+  post              community?       @relation(fields: [postId], references: [id])
+
+  read Boolean @default(false)
 }
 
 enum NotificationType {
@@ -216,15 +217,15 @@ enum NotificationType {
 }
 
 model Mcq {
-  id          String       @id @default(uuid())
+  id           String       @id @default(uuid())
   serialNumber Int          @default(0)
-  question    String
-  options     Json
-  answer      String
-  explanation String?
-  attempts    McqAttempt[] @relation("MCQAttempt")
-  createdBy   String
-  createdAt   DateTime     @default(now())
+  question     String
+  options      Json
+  answer       String
+  explanation  String?
+  attempts     McqAttempt[] @relation("MCQAttempt")
+  createdBy    String
+  createdAt    DateTime     @default(now())
 }
 
 model McqAttempt {
@@ -234,7 +235,7 @@ model McqAttempt {
   isCorrect Boolean
   createdAt DateTime @default(now())
   student   Student  @relation(fields: [studentId], references: [id])
-  mcq       Mcq      @relation(fields: [mcqId], references: [id], name: "MCQAttempt",onDelete: Cascade)
+  mcq       Mcq      @relation(fields: [mcqId], references: [id], name: "MCQAttempt", onDelete: Cascade)
 }
 
 model Resource {
@@ -250,26 +251,27 @@ model Resource {
   student Student? @relation(fields: [addedByStudentId], references: [id], map: "Resource_Student_fkey")
   teacher Teacher? @relation(fields: [addedByTeacherId], references: [id], map: "Resource_Teacher_fkey")
 }
+
 model Gatemcq {
-  id          String       @id @default(uuid())
-  serialNumber Int          @default(0)
-  question    String
-  options     Json
-  answer      String
-  explanation String?
-  attempts    GatemcqAttempt[] @relation("GATEMCQAttempt")
-  createdBy   String
-  createdAt   DateTime     @default(now())
+  id           String           @id @default(uuid())
+  serialNumber Int              @default(0)
+  question     String
+  options      Json
+  answer       String
+  explanation  String?
+  attempts     GatemcqAttempt[] @relation("GATEMCQAttempt")
+  createdBy    String
+  createdAt    DateTime         @default(now())
 }
 
 model GatemcqAttempt {
   id        String   @id @default(uuid())
   studentId String
-  gatemcqId     String
+  gatemcqId String
   isCorrect Boolean
   createdAt DateTime @default(now())
   student   Student  @relation(fields: [studentId], references: [id])
-  mcq       Gatemcq      @relation(fields: [gatemcqId], references: [id], name: "GATEMCQAttempt",onDelete: Cascade)
+  mcq       Gatemcq  @relation(fields: [gatemcqId], references: [id], name: "GATEMCQAttempt", onDelete: Cascade)
 }
 
 model Gateresource {
@@ -284,4 +286,28 @@ model Gateresource {
 
   student Student? @relation(fields: [addedByStudentId], references: [id], map: "GATE_Resource_Student_fkey")
   teacher Teacher? @relation(fields: [addedByTeacherId], references: [id], map: "GATE_Resource_Teacher_fkey")
+}
+
+model Problem {
+  id          String       @id @default(uuid())
+  title       String
+  description String       @db.Text
+  difficulty  String // EASY, MEDIUM, HARD
+  testCases   Json
+  tags        String
+  submissions Submission[]
+  createdAt   DateTime     @default(now())
+}
+
+model Submission {
+  id         String   @id @default(uuid())
+  problemId  String
+  userId     String // For simplicity, assuming userId is a string
+  sourceCode String   @db.Text
+  languageId Int
+  status     String // PENDING, COMPLETED, ERROR
+  results    Json     @db.Json // Store test case results as JSON
+  createdAt  DateTime @default(now())
+  problem    Problem  @relation(fields: [problemId], references: [id])
+  student    Student  @relation(fields: [userId], references: [id])
 }
