@@ -13,10 +13,9 @@ function Gatehome() {
 
     // Fetch resources when component mounts and status is idle
     useEffect(() => {
-        if (status === 'idle') {
             dispatch(fetchResources());
-        }
-    }, [status, dispatch]);
+
+    }, [dispatch]);
 
     // Debug logs
     console.log("Resources data:", resources);
