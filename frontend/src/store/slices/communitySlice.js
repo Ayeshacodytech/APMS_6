@@ -29,7 +29,7 @@ export const fetchMyPosts = createAsyncThunk(
     // Only fetch if there are more pages or we're explicitly fetching page 1
     if (page === 1 || page <= state.community.myPostsTotalPages) {
       const response = await axios.get(
-        "https://futureforge-iota.vercel.app/api/v1/community/myposts",
+        "https://futureforge.onrender.com/api/v1/community/myposts",
         {
           params: { page, limit: state.community.postsPerPage },
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -55,7 +55,7 @@ export const fetchPosts = createAsyncThunk(
     // Only fetch if there are more pages or we're explicitly fetching page 1
     if (page === 1 || page <= state.community.totalPages) {
       const response = await axios.get(
-        `https://futureforge-iota.vercel.app/api/v1/community/posts`,
+        `https://futureforge.onrender.com/api/v1/community/posts`,
         {
           params: { page, limit: state.community.postsPerPage },
           headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -78,7 +78,7 @@ export const fetchPostById = createAsyncThunk(
   "community/fetchPostById",
   async (postId) => {
     const response = await axios.get(
-      `https://futureforge-iota.vercel.app/api/v1/community/posts/${postId}`,
+      `https://futureforge.onrender.com/api/v1/community/posts/${postId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -92,7 +92,7 @@ export const createPost = createAsyncThunk(
   "community/createPost",
   async (postData, { rejectWithValue }) => {
     const response = await axios.post(
-      "https://futureforge-iota.vercel.app/api/v1/community/newpost",
+      "https://futureforge.onrender.com/api/v1/community/newpost",
       postData,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -107,7 +107,7 @@ export const deletePost = createAsyncThunk(
   "community/deletePost",
   async (postId) => {
     await axios.delete(
-      `https://futureforge-iota.vercel.app/api/v1/community/post/${postId}`,
+      `https://futureforge.onrender.com/api/v1/community/post/${postId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -121,7 +121,7 @@ export const likePost = createAsyncThunk(
   "community/likePost",
   async (postId) => {
     const response = await axios.post(
-      `https://futureforge-iota.vercel.app/api/v1/community/likes/post/${postId}`,
+      `https://futureforge.onrender.com/api/v1/community/likes/post/${postId}`,
       {},
       { headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
     );
@@ -133,7 +133,7 @@ export const fetchPostLikes = createAsyncThunk(
   "community/fetchPostLikes",
   async (postId) => {
     const response = await axios.get(
-      `https://futureforge-iota.vercel.app/api/v1/community/posts/${postId}/likes`,
+      `https://futureforge.onrender.com/api/v1/community/posts/${postId}/likes`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -147,7 +147,7 @@ export const fetchComments = createAsyncThunk(
   "community/fetchComments",
   async (postId) => {
     const response = await axios.get(
-      `https://futureforge-iota.vercel.app/api/v1/community/posts/${postId}/comments`,
+      `https://futureforge.onrender.com/api/v1/community/posts/${postId}/comments`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -161,7 +161,7 @@ export const addComment = createAsyncThunk(
   "community/addComment",
   async ({ postId, message }) => {
     const response = await axios.post(
-      `https://futureforge-iota.vercel.app/api/v1/community/${postId}/comments`,
+      `https://futureforge.onrender.com/api/v1/community/${postId}/comments`,
       { message },
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -176,7 +176,7 @@ export const replyToComment = createAsyncThunk(
   "community/replyToComment",
   async ({ commentId, message }) => {
     const response = await axios.post(
-      `https://futureforge-iota.vercel.app/api/v1/community/reply/${commentId}`,
+      `https://futureforge.onrender.com/api/v1/community/reply/${commentId}`,
       { message },
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },

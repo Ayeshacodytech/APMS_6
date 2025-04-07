@@ -25,7 +25,7 @@ export const initialState = {
 // Fetch all MCQs
 export const fetchMCQs = createAsyncThunk("aptitude/fetchMCQs", async () => {
   const response = await axios.get(
-    "https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs",
+    "https://futureforge.onrender.com/api/v1/teacher/aptitude/mcqs",
     {
       headers: { Authorization: `Bearer ${Cookies.get("token")}` },
     }
@@ -38,7 +38,7 @@ export const fetchMyMCQs = createAsyncThunk(
   "aptitude/fetchMyMCQs",
   async () => {
     const response = await axios.get(
-      "https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mymcq",
+      "https://futureforge.onrender.com/api/v1/teacher/aptitude/mymcq",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -53,7 +53,7 @@ export const createMCQ = createAsyncThunk(
   "aptitude/createMCQ",
   async (mcqData) => {
     const response = await axios.post(
-      "https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs",
+      "https://futureforge.onrender.com/api/v1/teacher/aptitude/mcqs",
       mcqData,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -68,7 +68,7 @@ export const deleteMCQ = createAsyncThunk(
   "aptitude/deleteMCQ",
   async (mcqId) => {
     await axios.delete(
-      `https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs/${mcqId}`,
+      `https://futureforge.onrender.com/api/v1/teacher/aptitude/mcqs/${mcqId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -82,7 +82,7 @@ export const fetchMCQById = createAsyncThunk(
   "aptitude/fetchMCQById",
   async (mcqId) => {
     const response = await axios.get(
-      `https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/mcqs/${mcqId}`,
+      `https://futureforge.onrender.com/api/v1/teacher/aptitude/mcqs/${mcqId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -100,7 +100,7 @@ export const fetchResources = createAsyncThunk(
   "aptitude/fetchResources",
   async () => {
     const response = await axios.get(
-      "https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources",
+      "https://futureforge.onrender.com/api/v1/teacher/aptitude/resources",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -114,7 +114,7 @@ export const fetchMyResources = createAsyncThunk(
   "aptitude/fetchMyResources",
   async () => {
     const response = await axios.get(
-      "https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/myresources",
+      "https://futureforge.onrender.com/api/v1/teacher/aptitude/myresources",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -128,7 +128,7 @@ export const fetchResourceById = createAsyncThunk(
   "aptitude/fetchResourceById",
   async (resourceId) => {
     const response = await axios.get(
-      `https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources/${resourceId}`,
+      `https://futureforge.onrender.com/api/v1/teacher/aptitude/resources/${resourceId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -142,7 +142,7 @@ export const createResource = createAsyncThunk(
   "aptitude/createResource",
   async (resourceData) => {
     const response = await axios.post(
-      "https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources",
+      "https://futureforge.onrender.com/api/v1/teacher/aptitude/resources",
       resourceData,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -157,7 +157,7 @@ export const deleteResource = createAsyncThunk(
   "aptitude/deleteResource",
   async (resourceId) => {
     await axios.delete(
-      `https://futureforge-iota.vercel.app/api/v1/teacher/aptitude/resources/${resourceId}`,
+      `https://futureforge.onrender.com/api/v1/teacher/aptitude/resources/${resourceId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }

@@ -31,7 +31,7 @@ const TeacherNewPostForm = () => {
 
       try {
         const response = await fetch(
-          "https://futureforge-iota.vercel.app/api/v1/community/upload-image",
+          "https://futureforge.onrender.com/api/v1/community/upload-image",
           {
             method: "POST",
             body: formData,

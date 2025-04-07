@@ -29,7 +29,7 @@ const Notifications = () => {
       return;
     }
 
-    const socket = io("https://futureforge-iota.vercel.app", {
+    const socket = io("https://futureforge.onrender.com", {
       auth: { token },
     });
 
