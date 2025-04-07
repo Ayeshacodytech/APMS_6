@@ -40,7 +40,7 @@ export function useTeacherSignup() {
     console.log("done");
     try {
       const response = await axios.post(
-        "https://apms-6.onrender.com/api/v1/teacher/signup",
+        "https://futureforge-iota.vercel.app/api/v1/teacher/signup",
         {
           name: username,
           email,

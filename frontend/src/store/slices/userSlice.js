@@ -26,7 +26,7 @@ const token = Cookies.get("token");
 // Fetch user profile
 export const fetchProfile = createAsyncThunk("user/fetchProfile", async () => {
   const response = await axios.get(
-    "https://apms-6.onrender.com/api/v1/student/profile",
+    "https://futureforge-iota.vercel.app/api/v1/student/profile",
     {
       headers: {
         Authorization: `Bearer ${Cookies.get("token")}`,
@@ -41,7 +41,7 @@ export const updateProfile = createAsyncThunk(
   "user/updateProfile",
   async (updatedData) => {
     const response = await axios.put(
-      "https://apms-6.onrender.com/api/v1/student/updateProfile",
+      "https://futureforge-iota.vercel.app/api/v1/student/updateProfile",
       updatedData,
       {
         headers: {
@@ -58,7 +58,7 @@ export const updatePlacementStatus = createAsyncThunk(
   "user/updatePlacementStatus",
   async (isPlaced) => {
     const response = await axios.put(
-      "https://apms-6.onrender.com/api/v1/student/updatePlacement",
+      "https://futureforge-iota.vercel.app/api/v1/student/updatePlacement",
       { isPlaced },
       {
         headers: {
@@ -75,7 +75,7 @@ export const createPlacedCompany = createAsyncThunk(
   "user/createPlacedCompany",
   async (companyData) => {
     const response = await axios.post(
-      "https://apms-6.onrender.com/api/v1/student/createPlacedCompany",
+      "https://futureforge-iota.vercel.app/api/v1/student/createPlacedCompany",
       companyData,
       {
         headers: {
@@ -92,7 +92,7 @@ export const updatePlacedCompany = createAsyncThunk(
   "user/updatePlacedCompany",
   async ({ id, companyData }) => {
     const response = await axios.put(
-      `https://apms-6.onrender.com/api/v1/student/updatePlacedCompany/${id}`,
+      `https://futureforge-iota.vercel.app/api/v1/student/updatePlacedCompany/${id}`,
       companyData,
       {
         headers: {

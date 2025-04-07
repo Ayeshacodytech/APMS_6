@@ -51,7 +51,7 @@ export const initializeSocket = () => async (dispatch) => {
 
   dispatch(connectStart());
 
-  socket = io("https://apms-6.onrender.com", {
+  socket = io("https://futureforge-iota.vercel.app", {
     auth: { token },
     reconnection: true, // Auto-reconnect
     reconnectionAttempts: 5,

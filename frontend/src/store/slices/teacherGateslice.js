@@ -25,7 +25,7 @@ export const initialState = {
 // Fetch all MCQs
 export const fetchMCQs = createAsyncThunk("gate/fetchMCQs", async () => {
   const response = await axios.get(
-    "https://apms-6.onrender.com/api/v1/teacher/gate/mcqs",
+    "https://futureforge-iota.vercel.app/api/v1/teacher/gate/mcqs",
     {
       headers: { Authorization: `Bearer ${Cookies.get("token")}` },
     }
@@ -34,55 +34,46 @@ export const fetchMCQs = createAsyncThunk("gate/fetchMCQs", async () => {
 });
 
 // Fetch my MCQs
-export const fetchMyMCQs = createAsyncThunk(
-  "gate/fetchMyMCQs",
-  async () => {
-    const response = await axios.get(
-      "https://apms-6.onrender.com/api/v1/teacher/gate/mymcq",
-      {
-        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-      }
-    );
-    console.log("my mcqs redux", response.data);
-    return response.data; // Assumes the API returns an array
-  }
-);
+export const fetchMyMCQs = createAsyncThunk("gate/fetchMyMCQs", async () => {
+  const response = await axios.get(
+    "https://futureforge-iota.vercel.app/api/v1/teacher/gate/mymcq",
+    {
+      headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+    }
+  );
+  console.log("my mcqs redux", response.data);
+  return response.data; // Assumes the API returns an array
+});
 
 // Create a new MCQ
-export const createMCQ = createAsyncThunk(
-  "gate/createMCQ",
-  async (mcqData) => {
-    const response = await axios.post(
-      "https://apms-6.onrender.com/api/v1/teacher/gate/mcqs",
-      mcqData,
-      {
-        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-      }
-    );
-    return response.data;
-  }
-);
+export const createMCQ = createAsyncThunk("gate/createMCQ", async (mcqData) => {
+  const response = await axios.post(
+    "https://futureforge-iota.vercel.app/api/v1/teacher/gate/mcqs",
+    mcqData,
+    {
+      headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+    }
+  );
+  return response.data;
+});
 
 // Delete an MCQ
-export const deleteMCQ = createAsyncThunk(
-  "gate/deleteMCQ",
-  async (mcqId) => {
-    await axios.delete(
-      `https://apms-6.onrender.com/api/v1/teacher/gate/mcqs/${mcqId}`,
-      {
-        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-      }
-    );
-    return mcqId;
-  }
-);
+export const deleteMCQ = createAsyncThunk("gate/deleteMCQ", async (mcqId) => {
+  await axios.delete(
+    `https://futureforge-iota.vercel.app/api/v1/teacher/gate/mcqs/${mcqId}`,
+    {
+      headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+    }
+  );
+  return mcqId;
+});
 
 // Optionally, fetch a single MCQ by ID if needed
 export const fetchMCQById = createAsyncThunk(
   "gate/fetchMCQById",
   async (mcqId) => {
     const response = await axios.get(
-      `https://apms-6.onrender.com/api/v1/teacher/gate/mcqs/${mcqId}`,
+      `https://futureforge-iota.vercel.app/api/v1/teacher/gate/mcqs/${mcqId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -100,7 +91,7 @@ export const fetchResources = createAsyncThunk(
   "gate/fetchResources",
   async () => {
     const response = await axios.get(
-      "https://apms-6.onrender.com/api/v1/teacher/gate/resources",
+      "https://futureforge-iota.vercel.app/api/v1/teacher/gate/resources",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -114,7 +105,7 @@ export const fetchMyResources = createAsyncThunk(
   "gate/fetchMyResources",
   async () => {
     const response = await axios.get(
-      "https://apms-6.onrender.com/api/v1/teacher/gate/myresources",
+      "https://futureforge-iota.vercel.app/api/v1/teacher/gate/myresources",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -128,7 +119,7 @@ export const fetchResourceById = createAsyncThunk(
   "gate/fetchResourceById",
   async (resourceId) => {
     const response = await axios.get(
-      `https://apms-6.onrender.com/api/v1/teacher/gate/resources/${resourceId}`,
+      `https://futureforge-iota.vercel.app/api/v1/teacher/gate/resources/${resourceId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -142,7 +133,7 @@ export const createResource = createAsyncThunk(
   "gate/createResource",
   async (resourceData) => {
     const response = await axios.post(
-      "https://apms-6.onrender.com/api/v1/teacher/gate/resources",
+      "https://futureforge-iota.vercel.app/api/v1/teacher/gate/resources",
       resourceData,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -157,7 +148,7 @@ export const deleteResource = createAsyncThunk(
   "gate/deleteResource",
   async (resourceId) => {
     await axios.delete(
-      `https://apms-6.onrender.com/api/v1/teacher/gate/resources/${resourceId}`,
+      `https://futureforge-iota.vercel.app/api/v1/teacher/gate/resources/${resourceId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }

@@ -29,7 +29,7 @@ const NewPostForm = () => {
 
       try {
         const response = await fetch(
-          "https://apms-6.onrender.com/api/v1/community/upload-image",
+          "https://futureforge-iota.vercel.app/api/v1/community/upload-image",
           {
             method: "POST",
             body: formData,

@@ -19,7 +19,7 @@ export const fetchNotifications = createAsyncThunk(
     if (!token) throw new Error("Token not found");
 
     const response = await axios.get(
-      "https://apms-6.onrender.com/api/v1/notification/teacher",
+      "https://futureforge-iota.vercel.app/api/v1/notification/teacher",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -35,7 +35,7 @@ export const markNotificationRead = createAsyncThunk(
     if (!token) throw new Error("Token not found");
 
     await axios.patch(
-      `https://apms-6.onrender.com/api/v1/notification/${notificationId}/read`,
+      `https://futureforge-iota.vercel.app/api/v1/notification/${notificationId}/read`,
       {}, // Empty body (if needed)
       { headers: { Authorization: `Bearer ${Cookies.get("token")}` } } // Headers should be the 3rd argument
     );
@@ -101,7 +101,7 @@ export const setupSocketListeners = (dispatch) => {
     return null;
   }
 
-  const socket = io("https://apms-6.onrender.com", { auth: { token } });
+  const socket = io("https://futureforge-iota.vercel.app", { auth: { token } });
 
   socket.on("connect_error", (err) => {
     console.error("WebSocket connection error:", err.message);

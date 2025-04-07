@@ -29,7 +29,9 @@ const Notifications = () => {
       return;
     }
 
-    const socket = io("https://apms-6.onrender.com", { auth: { token } });
+    const socket = io("https://futureforge-iota.vercel.app", {
+      auth: { token },
+    });
 
     // Listen for new notifications
     socket.on("notification", (notification) => {

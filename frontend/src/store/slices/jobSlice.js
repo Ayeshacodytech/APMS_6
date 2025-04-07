@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_URL = "https://apms-6.onrender.com/api/v1/admin"; // Update as per your backend routes
+const API_URL = "https://futureforge-iota.vercel.app/api/v1/admin"; // Update as per your backend routes
 
 const getToken = () => Cookies.get("token");
 
@@ -19,7 +19,7 @@ export const fetchJobs = createAsyncThunk(
     try {
       const token = getToken();
       const response = await axios.get(
-        "https://apms-6.onrender.com/api/v1/student/jobs",
+        "https://futureforge-iota.vercel.app/api/v1/student/jobs",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

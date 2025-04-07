@@ -11,7 +11,7 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import TeacherNotificationCard from "./teachernotificationCard";
 
-const socket = io("https://apms-6.onrender.com", {
+const socket = io("https://futureforge-iota.vercel.app", {
   auth: { token: document.cookie.split("token=")[1] }, // Extract token from cookies
 });
 

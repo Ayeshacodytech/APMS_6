@@ -26,7 +26,7 @@ const initialState = {
 // GET all MCQs
 export const fetchMCQs = createAsyncThunk("aptitude/fetchMCQs", async () => {
   const response = await axios.get(
-    "https://apms-6.onrender.com/api/v1/aptitude/mcqs",
+    "https://futureforge-iota.vercel.app/api/v1/aptitude/mcqs",
     {
       headers: { Authorization: `Bearer ${Cookies.get("token")}` },
     }
@@ -39,7 +39,7 @@ export const fetchMCQById = createAsyncThunk(
   "aptitude/fetchMCQById",
   async (mcqId) => {
     const response = await axios.get(
-      `https://apms-6.onrender.com/api/v1/aptitude/mcqs/${mcqId}`,
+      `https://futureforge-iota.vercel.app/api/v1/aptitude/mcqs/${mcqId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -54,7 +54,7 @@ export const attemptMCQ = createAsyncThunk(
   async ({ mcqId, attemptData }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://apms-6.onrender.com/api/v1/aptitude/mcqs/${mcqId}/attempt`,
+        `https://futureforge-iota.vercel.app/api/v1/aptitude/mcqs/${mcqId}/attempt`,
         attemptData,
         { headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
       );
@@ -74,7 +74,7 @@ export const fetchResources = createAsyncThunk(
   "aptitude/fetchResources",
   async () => {
     const response = await axios.get(
-      "https://apms-6.onrender.com/api/v1/aptitude/resources",
+      "https://futureforge-iota.vercel.app/api/v1/aptitude/resources",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -88,7 +88,7 @@ export const fetchResourceById = createAsyncThunk(
   "aptitude/fetchResourceById",
   async (resourceId) => {
     const response = await axios.get(
-      `https://apms-6.onrender.com/api/v1/aptitude/resources/${resourceId}`,
+      `https://futureforge-iota.vercel.app/api/v1/aptitude/resources/${resourceId}`,
       { headers: { Authorization: `Bearer ${Cookies.get("token")}` } }
     );
     return response.data;
@@ -100,7 +100,7 @@ export const fetchMyResources = createAsyncThunk(
   "aptitude/fetchMyResources",
   async () => {
     const response = await axios.get(
-      "https://apms-6.onrender.com/api/v1/aptitude/myresources",
+      "https://futureforge-iota.vercel.app/api/v1/aptitude/myresources",
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
@@ -115,7 +115,7 @@ export const createResource = createAsyncThunk(
   async (resourceData, { rejectWithValue }) => {
     console.log("resourceData:", resourceData);
     const response = await axios.post(
-      "https://apms-6.onrender.com/api/v1/aptitude/resources",
+      "https://futureforge-iota.vercel.app/api/v1/aptitude/resources",
       resourceData,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
@@ -130,7 +130,7 @@ export const deleteResource = createAsyncThunk(
   "aptitude/deleteResource",
   async (resourceId) => {
     await axios.delete(
-      `https://apms-6.onrender.com/api/v1/aptitude/resources/${resourceId}`,
+      `https://futureforge-iota.vercel.app/api/v1/aptitude/resources/${resourceId}`,
       {
         headers: { Authorization: `Bearer ${Cookies.get("token")}` },
       }
