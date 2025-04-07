@@ -127,7 +127,7 @@ const profileUpdateSchema = zod.object({
     email: zod.string().email().optional(),
     registernumber: zod.string().optional(),
     year: zod.string().optional(),
-    departmant: zod.string().optional(),
+    department: zod.string().optional(),
     YearofGraduation: zod.string().optional(),
     FieldofInterest: zod.string().optional(),
 });
@@ -175,7 +175,7 @@ router.put('/updateProfile', authMiddleware('student'), async (req, res) => {
                 email: body.email,
                 registernumber: body.registernumber,
                 year: body.year,
-                departmant: body.departmant,
+                department: body.department,
                 batch:body.batch,
                 cgpa:body.cgpa,
                 YearofGraduation: body.YearofGraduation,
