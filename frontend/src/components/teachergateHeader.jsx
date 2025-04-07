@@ -25,7 +25,7 @@ export function TeacherGateHeader() {
                 <div className="flex flex-col md:flex-row justify-between items-center py-2 md:py-0">
                     {/* Left: Logo and name */}
                     <div className="flex items-center">
-                        <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+                        <div className="w-12 h-12 md:w-16 pt-4 md:h-16 flex items-center justify-center">
                             <svg
                                 className="w-full h-full"
                                 viewBox="0 0 200 200"
@@ -37,7 +37,7 @@ export function TeacherGateHeader() {
                                     fontFamily="grechen"
                                     fontSize="100"
                                     fontWeight="bold"
-                                    fill="white"
+                                    fill="#6366F1"
                                 >
                                     F
                                 </text>
@@ -47,7 +47,7 @@ export function TeacherGateHeader() {
                                     fontFamily="grechen"
                                     fontSize="50"
                                     fontWeight="bold"
-                                    fill="white"
+                                    fill="#6366F1"
                                 >
                                     F
                                 </text>
