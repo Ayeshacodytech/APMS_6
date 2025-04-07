@@ -135,7 +135,7 @@ export function SideNavBar() {
     },
     {
       name: "Code",
-      path: "/code",
+      path: "/code/home",
       icon: (
         <svg
           width="20px"
