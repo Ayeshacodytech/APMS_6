@@ -133,7 +133,7 @@ function App() {
               <Route path="/code/submission" element={<SubmissionsPage/>}/>
               <Route path="/code/submission/:id" element={<SubmissionDetailPage/>}/>
 
-              {/* <Route path="*" element={<Navigate to="/signin" replace />} /> */}
+              <Route path="*" element={<Navigate to="/signin" replace />} /> 
             </Routes>
           </BrowserRouter>
         </AuthProvider>
