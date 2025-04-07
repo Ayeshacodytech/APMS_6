@@ -27,37 +27,37 @@ export function CommunityHeader() {
         <div className="flex flex-col md:flex-row justify-between items-center py-2 md:py-0">
           {/* Left: Logo and name */}
           <div className="flex items-center">
-            <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
-              <svg
-                className="w-full h-full"
-                viewBox="0 0 200 200"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <text
-                  x="20"
-                  y="100"
-                  fontFamily="grechen"
-                  fontSize="100"
-                  fontWeight="bold"
-                  fill="white"
-                >
-                  F
-                </text>
-                <text
-                  x="50"
-                  y="100"
-                  fontFamily="grechen"
-                  fontSize="50"
-                  fontWeight="bold"
-                  fill="white"
-                >
-                  F
-                </text>
-              </svg>
-            </div>
-            <span className="fontfamily-grechen text-2xl text-[#6366F1] font-bold ml-2">
-              Futureforge
-            </span>
+            <div className="w-12 h-12 md:w-16 pt-4 md:h-16 flex items-center justify-center">
+                            <svg
+                                className="w-full h-full"
+                                viewBox="0 0 200 200"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <text
+                                    x="20"
+                                    y="100"
+                                    fontFamily="grechen"
+                                    fontSize="100"
+                                    fontWeight="bold"
+                                    fill="#6366F1"
+                                >
+                                    F
+                                </text>
+                                <text
+                                    x="50"
+                                    y="100"
+                                    fontFamily="grechen"
+                                    fontSize="50"
+                                    fontWeight="bold"
+                                    fill="#6366F1"
+                                >
+                                    F
+                                </text>
+                            </svg>
+                        </div>
+                        <span className="fontfamily-grechen text-2xl text-[#6366F1] font-bold ml-2">
+                            Futureforge
+                        </span>
           </div>
 
           {/* Right: Navigation Buttons */}
