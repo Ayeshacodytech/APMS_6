@@ -10,7 +10,7 @@ export default function AdminHeader() {
     }
     return (
         <nav className="h-16 shadow-lg border rounded-lg backdrop-blur bg-white/30">
-            <div className="flex justify-between items-center h-full px-2">
+            <div className="flex justify-between md:flex-row items-center h-full px-2">
                 <div className="flex items-center">
                     <div className="flex items-center justify-center">
                         <svg width="150" height="150" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
