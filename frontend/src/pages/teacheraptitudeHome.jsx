@@ -13,9 +13,7 @@ function TeacherAptitudehome() {
 
     // Fetch resources when component mounts and status is idle
     useEffect(() => {
-        if (status === 'idle') {
             dispatch(fetchResources());
-        }
     }, [status, dispatch]);
 
     // Debug logs
