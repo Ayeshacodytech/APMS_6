@@ -11,11 +11,6 @@ const AdminHome = () => {
     const jobError = useSelector(selectJobsError);
 
     useEffect(() => {
-        if (jobStatus === "idle") {
-            dispatch(fetchAdminJobs());
-        }
-    }, [jobStatus, dispatch]);
-    useEffect(() => {
         dispatch(fetchAdminJobs()); // Fetch jobs when the component loads
     }, [dispatch]);
 
