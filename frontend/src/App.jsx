@@ -175,7 +175,7 @@ function App() {
               />
               <Route
                 path="/teacher/gate/new/resource"
-                element={<TeacherNewgateResourceForm/>
+                element={<TeacherNewgateResourceForm />}
               />
               <Route
                 path="/aptitude/myresources"
