@@ -41,8 +41,8 @@ import TeacherSignin from "./pages/teachersignin.jsx";
 import TeacherSignup from "./pages/teachersignup.jsx";
 import { Updatejob } from "./pages/updatejob.jsx";
 import WebSocketListener from "./components/WebSocketListener.jsx";
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import UnderDevelopment from "./components/Underdevlopment.jsx";
 import Gatehome from "./pages/gateHome.jsx";
 import GateMCQs from "./components/gateMCQs.jsx";
@@ -63,16 +63,15 @@ import ProblemForm from "./pages/problemform.jsx";
 import AdminProblemListPage from "./pages/adminproblemListPage.jsx";
 import AdminLeaderboard from "./pages/adminleaderBoard.jsx";
 import AdminProblemDetailPage from "./pages/adminproblemDetailPage.jsx";
- // Import socket helpers
+// Import socket helpers
 
 function App() {
-  
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <AuthProvider>
           <BrowserRouter>
-          <WebSocketListener />
+            <WebSocketListener />
 
             {/* Global Toast Container */}
             <ToastContainer />
@@ -92,18 +91,36 @@ function App() {
               <Route path="/communityprofile" element={<CommunityProfile />} />
               <Route path="/admin/signin" element={<Adminsignin />} />
               <Route path="/admin/code/add" element={<ProblemForm />} />
-              <Route path="/admin/code/problem" element={<AdminProblemListPage />} />
+              <Route
+                path="/admin/code/problem"
+                element={<AdminProblemListPage />}
+              />
               <Route path="/admin/leaderboard" element={<AdminLeaderboard />} />
               <Route path="/teacher/signup" element={<TeacherSignup />} />
               <Route path="/teacher/signin" element={<TeacherSignin />} />
               <Route path="/admin/home" element={<AdminHome />} />
               <Route path="/admin/addjob" element={<AddJob />} />
-              <Route path="/admin/code/problems" element={<AdminProblemListPage />} />
-              <Route path="/admin/code/problem/:id" element={<AdminProblemDetailPage />} />
+              <Route
+                path="/admin/code/problems"
+                element={<AdminProblemListPage />}
+              />
+              <Route
+                path="/admin/code/problem/:id"
+                element={<AdminProblemDetailPage />}
+              />
               <Route path="/teacher/new" element={<TeacherNewPostForm />} />
-              <Route path="/teacher/community" element={<TeacherCommunityhome />} />
-              <Route path="/teacher/community/:id" element={<TeacherArticle />} />
-              <Route path="/teacher/communityprofile" element={<TeacherCommunityProfile />} />
+              <Route
+                path="/teacher/community"
+                element={<TeacherCommunityhome />}
+              />
+              <Route
+                path="/teacher/community/:id"
+                element={<TeacherArticle />}
+              />
+              <Route
+                path="/teacher/communityprofile"
+                element={<TeacherCommunityProfile />}
+              />
               <Route path="/aptitude/mcq" element={<AptitudeMCQs />} />
               <Route path="/aptitude/mcq/:id" element={<AptitudeMCQ />} />
               <Route path="/aptitude" element={<Aptitudehome />} />
@@ -111,29 +128,68 @@ function App() {
               <Route path="/gate" element={<Gatehome />} />
               <Route path="/gate/mcq" element={<GateMCQs />} />
               <Route path="/gate/mcq/:id" element={<GateMCQ />} />
-              <Route path="/gate/new/resource" element={<NewGateResourceForm />} />
+              <Route
+                path="/gate/new/resource"
+                element={<NewGateResourceForm />}
+              />
               <Route path="/gate/myresources" element={<GateProfile />} />
-              <Route path="/aptitude/new/resource" element={<NewResourceForm />} />
-              <Route path="/teacher/aptitude/new/mcq" element={<AddAptitudeMCQ />} />
-              <Route path="/teacher/aptitude/home" element={<TeacherAptitudehome />} />
-              <Route path="/teacher/aptitude/mcq" element={<TeacherAptitudeMCQs />} />
-              <Route path="/teacher/aptitude/mymcq" element={<TeacherAptitudemyMCQs />} />
-              <Route path="/teacher/aptitude/myresource" element={<TeacherAptitudeProfile />} />
-              <Route path="/teacher/aptitude/new/resource" element={<TeacherNewResourceForm />} />
+              <Route
+                path="/aptitude/new/resource"
+                element={<NewResourceForm />}
+              />
+              <Route
+                path="/teacher/aptitude/new/mcq"
+                element={<AddAptitudeMCQ />}
+              />
+              <Route
+                path="/teacher/aptitude/home"
+                element={<TeacherAptitudehome />}
+              />
+              <Route
+                path="/teacher/aptitude/mcq"
+                element={<TeacherAptitudeMCQs />}
+              />
+              <Route
+                path="/teacher/aptitude/mymcq"
+                element={<TeacherAptitudemyMCQs />}
+              />
+              <Route
+                path="/teacher/aptitude/myresource"
+                element={<TeacherAptitudeProfile />}
+              />
+              <Route
+                path="/teacher/aptitude/new/resource"
+                element={<TeacherNewResourceForm />}
+              />
               <Route path="/teacher/gate/new/mcq" element={<AddGateMCQ />} />
               <Route path="/teacher/gate/home" element={<TeacherGatehome />} />
-              <Route path="/teacher/aptitude/mcq" element={<TeacherGateMCQs />} />
-              <Route path="/teacher/aptitude/mymcq" element={<TeacherGatemyMCQs />} />
-              <Route path="/teacher/aptitude/myresource" element={<TeacherGatehome />} />
-              <Route path="/teacher/aptitude/new/resource" element={<TeacherGateProfile />} />
-              <Route path="/aptitude/myresources" element={<AptitudeProfile />} />
+              <Route path="/teacher/gate/mcq" element={<TeacherGateMCQs />} />
+              <Route
+                path="/teacher/gate/mymcq"
+                element={<TeacherGatemyMCQs />}
+              />
+              <Route
+                path="/teacher/gate/myresource"
+                element={<TeacherGateProfile />}
+              />
+              <Route
+                path="/teacher/gate/new/resource"
+                element={<TeacherNewgateResourceForm />}
+              />
+              <Route
+                path="/aptitude/myresources"
+                element={<AptitudeProfile />}
+              />
               <Route path="/code/home" element={<ProblemListPage />} />
               <Route path="/code/problem/:id" element={<ProblemDetailPage />} />
               <Route path="/code/leaderboard" element={<Leaderboard />} />
-              <Route path="/code/submission" element={<SubmissionsPage/>}/>
-              <Route path="/code/submission/:id" element={<SubmissionDetailPage/>}/>
+              <Route path="/code/submission" element={<SubmissionsPage />} />
+              <Route
+                path="/code/submission/:id"
+                element={<SubmissionDetailPage />}
+              />
 
-              <Route path="*" element={<Navigate to="/signin" replace />} /> 
+              <Route path="*" element={<Navigate to="/signin" replace />} />
             </Routes>
           </BrowserRouter>
         </AuthProvider>
