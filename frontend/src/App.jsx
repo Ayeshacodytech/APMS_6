@@ -63,6 +63,7 @@ import ProblemForm from "./pages/problemform.jsx";
 import AdminProblemListPage from "./pages/adminproblemListPage.jsx";
 import AdminLeaderboard from "./pages/adminleaderBoard.jsx";
 import AdminProblemDetailPage from "./pages/adminproblemDetailPage.jsx";
+import TeacherNewgateResourceForm from "./pages/teachernewGateResource.jsx";
 // Import socket helpers
 
 function App() {
@@ -174,7 +175,7 @@ function App() {
               />
               <Route
                 path="/teacher/gate/new/resource"
-                element={<TeacherNewgateResourceForm />}
+                element={<TeacherNewgateResourceForm/>
               />
               <Route
                 path="/aptitude/myresources"
