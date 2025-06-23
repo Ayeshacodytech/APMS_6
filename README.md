@@ -3,8 +3,6 @@
 *Shape the Future, Forge Innovation Today*
 
 <div align="center">
-  
-![last-commit](https://img.shields.io/github/last-commit/Ayeshacodytech/Futureforge?style=flat&logo=git&logoColor=white&color=0080ff)
 ![repo-top-language](https://img.shields.io/github/languages/top/Ayeshacodytech/Futureforge?style=flat&color=0080ff)
 ![repo-language-count](https://img.shields.io/github/languages/count/Ayeshacodytech/Futureforge?style=flat&color=0080ff)
 
@@ -19,7 +17,6 @@
 ![Prisma](https://img.shields.io/badge/Prisma-2D3748.svg?style=flat&logo=Prisma&logoColor=white)
 ![Socket.io](https://img.shields.io/badge/Socket.io-010101.svg?style=flat&logo=socketdotio&logoColor=white)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4.svg?style=flat&logo=Axios&logoColor=white)
-![Jest](https://img.shields.io/badge/Jest-C21325.svg?style=flat&logo=Jest&logoColor=white)
 
 </div>
 
@@ -32,9 +29,7 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Usage](#usage)
-  - [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ---
 
@@ -66,3 +61,13 @@
 
    ```bash
    git clone https://github.com/Ayeshacodytech/Futureforge
+
+### 🚀 Usage
+
+Start the development server:
+
+```bash
+cd frontend
+npm run dev
+cd backend
+node index.js
